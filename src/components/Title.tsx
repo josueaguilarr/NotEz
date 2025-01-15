@@ -1,13 +1,13 @@
-import  { TypeScript }  from "../icons/Icons"
+import  { PlusIcon }  from "../icons/Icons"
 
 export const Title: React.FC = () => {
     return (
         <div className="flex justify-center gap-1">
-            <p className="text-8xl font-bold mb-10">
-                TODO
+            <p className="text-3xl font-bold">
+                NotEz
             </p>
             
-            <TypeScript className="size-16" />
+            <PlusIcon className="size-7 p-1 bg-[#3178C6] rounded-lg" />
         </div>
     )
 }

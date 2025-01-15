@@ -20,7 +20,7 @@ export const Footer: React.FC<Props> = ({
     const activeTodoWord = singleActiveCount ? 'tarea' : 'tareas'
 
     return (
-        <footer className="flex justify-between gap-7 sm:flex-row flex-col mt-4">
+        <footer className="flex justify-between gap-7 sm:flex-row flex-col mt-4 mb-6">
 
             {activeCount > 0 && (
                 <>
@@ -32,7 +32,7 @@ export const Footer: React.FC<Props> = ({
                 </>
             )}
 
-            <div className="flex text-xs sm:text-base">
+            <div className="flex flex-wrap text-xs gap-1 sm:text-base">
             {activeCount > 0 && (
             <Filters
                 filterSelected={filterSelected}
@@ -44,7 +44,7 @@ export const Footer: React.FC<Props> = ({
             {
                 completedCount > 0 && (
                     <button
-                        className="px-2 rounded-full mx-[0.25rem] text-sm font-medium bg-red-900 text-red-300"
+                        className="px-2 rounded-full text-sm font-medium bg-red-900 text-red-300"
                         onClick={onClearCompleted}
                     >
                         Borrar completados

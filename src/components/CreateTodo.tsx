@@ -18,7 +18,7 @@ export const CreateTodo: React.FC<Props> = ({ saveTodo }) => {
     return (
         <input
             type="text"
-            className="bg-neutral-950 w-full rounded-md p-4 text-sm font-medium ring-2 outline-none ring-[#fff]"
+            className="bg-neutral-800/40 w-full rounded-lg p-4 text-sm font-medium ring-2 outline-none ring-neutral-800/60"
             value={inputValue}
             onChange={(e) => { setInputValue(e.target.value) }}
             onKeyDown={handleKeyDown}
