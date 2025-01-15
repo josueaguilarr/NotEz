@@ -1,98 +1,110 @@
-import { useEffect, useState } from "react"
-import { Todos } from "../components/Todos"
-import { FilterValue, TodoTitle, Todo as TodoType, type TodoId } from "../types/types"
-import { TODO_FILTERS } from "../consts/consts"
-import { Footer } from "../components/Footer"
-import { Header } from "../components/Header"
+import { useEffect, useState } from "react";
+import { Todos } from "../components/Todos";
+import {
+  FilterValue,
+  TodoTitle,
+  Todo as TodoType,
+  type TodoId,
+} from "../types/types";
+import { TODO_FILTERS } from "../consts/consts";
+import { Footer } from "../components/Footer";
+import { Header } from "../components/Header";
+import { TrashIcon } from "../icons/Icons";
+import { Title } from "../components/Title";
 
 export const App = (): JSX.Element => {
-  const [todos, setTodos] = useState<TodoType[]>([])
-  const [filterSelected, setFilterSelected] = useState<FilterValue>(TODO_FILTERS.ALL)
+  const [todos, setTodos] = useState<TodoType[]>([]);
+  const [filterSelected, setFilterSelected] = useState<FilterValue>(
+    TODO_FILTERS.ALL
+  );
 
   const handleUpdateLocalStorage = (newTodos: TodoType[]): void => {
-    localStorage.setItem('todos', JSON.stringify(newTodos))
-  }
+    localStorage.setItem("todos", JSON.stringify(newTodos));
+  };
 
   const handleRemoveTodo = ({ id }: TodoId): void => {
-    const newTodos = todos.filter(todo => todo.id !== id)
-    setTodos(newTodos)
-    handleUpdateLocalStorage(newTodos)
-  }
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodos);
+    handleUpdateLocalStorage(newTodos);
+  };
 
-  const handleCompleted = (
-    { id, completed }: Pick<TodoType, 'id' | 'completed'>
-  ): void => {
-    const newTodos = todos.map(todo => {
+  const handleCompleted = ({
+    id,
+    completed,
+  }: Pick<TodoType, "id" | "completed">): void => {
+    const newTodos = todos.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
-          completed
-        }
+          completed,
+        };
       }
 
-      return todo
-    })
+      return todo;
+    });
 
-    setTodos(newTodos)
-    handleUpdateLocalStorage(newTodos)
-  }
+    setTodos(newTodos);
+    handleUpdateLocalStorage(newTodos);
+  };
 
   const handleFilterChange = (filter: FilterValue): void => {
-    setFilterSelected(filter)
-  }
+    setFilterSelected(filter);
+  };
 
   const handleRemoveAllCompleted = (): void => {
-    const newTodos = todos.filter(todo => !todo.completed)
-    setTodos(newTodos)
-    handleUpdateLocalStorage(newTodos)
-  }
+    const newTodos = todos.filter((todo) => !todo.completed);
+    setTodos(newTodos);
+    handleUpdateLocalStorage(newTodos);
+  };
 
   const handleAddTodo = ({ title }: TodoTitle): void => {
     const newTodo = {
       title,
       id: crypto.randomUUID(),
-      completed: false
-    }
+      completed: false,
+    };
 
-    const newTodos = [...todos, newTodo]
-    setTodos(newTodos)
-    handleUpdateLocalStorage(newTodos)
-  }
+    const newTodos = [...todos, newTodo];
+    setTodos(newTodos);
+    handleUpdateLocalStorage(newTodos);
+  };
 
-  const handleUpdateTitle = ({ id, title }: Pick<TodoType, 'id' | 'title'>
-  ): void => {
-    setTodos(todos =>
-      todos.map(todo =>
-        todo.id === id ? { ...todo, title: title } : todo
-      )
-    )
-  }
+  const handleUpdateTitle = ({
+    id,
+    title,
+  }: Pick<TodoType, "id" | "title">): void => {
+    setTodos((todos) =>
+      todos.map((todo) => (todo.id === id ? { ...todo, title: title } : todo))
+    );
+  };
 
-  const activeCount = todos.filter(todo => !todo.completed).length
-  const completedCount = todos.length - activeCount
+  const activeCount = todos.filter((todo) => !todo.completed).length;
+  const completedCount = todos.length - activeCount;
 
-  const filteredTodos = todos.filter(todo => {
-    if (filterSelected === TODO_FILTERS.ACTIVE) return !todo.completed
-    if (filterSelected === TODO_FILTERS.COMPLETED) return todo.completed
+  const filteredTodos = todos.filter((todo) => {
+    if (filterSelected === TODO_FILTERS.ACTIVE) return !todo.completed;
+    if (filterSelected === TODO_FILTERS.COMPLETED) return todo.completed;
 
-    return todo
-  })
+    return todo;
+  });
 
   useEffect(() => {
-    const todosSaved = localStorage.getItem('todos')
+    const todosSaved = localStorage.getItem("todos");
 
     if (todosSaved) {
-      setTodos(JSON.parse(todosSaved))
-      return
+      setTodos(JSON.parse(todosSaved));
+      return;
     }
 
-    localStorage.setItem('todos', JSON.stringify([]))
-  }, [])
+    localStorage.setItem("todos", JSON.stringify([]));
+  }, []);
 
   return (
-    <main
-      className='top-0 z-[-2] w-full bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] min-h-screen flex justify-center sm:items-center'>
-      <section className="md:w-1/2 w-full text-gray-200 mx-4 my-16 sm:my-10">
+    <main className="top-0 z-[-2] w-full bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] min-h-screen flex justify-center sm:items-start">
+      <section className="w-1/2 text-gray-200 mx-4 my-16 sm:my-10">
+        <div className="flex items-center mb-16">
+          <Title />
+        </div>
 
         <Header onAddTodo={handleAddTodo} />
 
@@ -112,5 +124,5 @@ export const App = (): JSX.Element => {
         />
       </section>
     </main>
-  )
-}
+  );
+};
