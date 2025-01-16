@@ -7,10 +7,10 @@ import {
   type TodoId,
 } from "../types/types";
 import { TODO_FILTERS } from "../consts/consts";
-import { Footer } from "../components/Footer";
+import { ActionBar } from "../components/ActionBar";
 import { Header } from "../components/Header";
-import { TrashIcon } from "../icons/Icons";
-import { Title } from "../components/Title";
+import { CreateTodo } from "../components/CreateTodo";
+import { Groups } from "../components/Groups";
 
 export const App = (): JSX.Element => {
   const [todos, setTodos] = useState<TodoType[]>([]);
@@ -102,13 +102,13 @@ export const App = (): JSX.Element => {
   return (
     <main className="top-0 z-[-2] w-full bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] min-h-screen flex justify-center sm:items-start">
       <section className="w-1/2 text-gray-200 mx-4 my-16 sm:my-10">
-        <div className="flex items-center mb-16">
-          <Title />
-        </div>
+        <Header />
 
-        <Header onAddTodo={handleAddTodo} />
+        <CreateTodo saveTodo={handleAddTodo} />
 
-        <Footer
+        <Groups />
+
+        <ActionBar
           activeCount={activeCount}
           completedCount={completedCount}
           filterSelected={filterSelected}
