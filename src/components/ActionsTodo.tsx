@@ -62,8 +62,8 @@ export const ActionsTodo: React.FC<Props> = ({
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <h2 className="text-lg font-bold mb-4">Agregar tarea a grupo(s)</h2>
-        {groups.map(({ id, name }) => (
-          <div className="flex items-center gap-2 my-4">
+        {groups.map(({ id, name }, index) => (
+          <div key={index} className="flex items-center gap-2 my-4">
             <label
               className="relative flex cursor-pointer items-center rounded-md"
               htmlFor={`checkbox-${id}`}
