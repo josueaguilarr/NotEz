@@ -4,9 +4,9 @@ import { Todo } from "./Todo"
 
 interface Props {
     todos: TodoType[],
-    setCompleted: ({ id, completed }: Pick<TodoType, 'id' | 'completed'>) => void,
-    setTitle: ({ id, title }: Pick<TodoType, 'id' | 'title'>) => void,
-    removeTodo: ({ id }: TodoId) => void
+    setCompleted: ({ uuid, completed }: Pick<TodoType, 'uuid' | 'completed'>) => void,
+    setTitle: ({ uuid, content }: Pick<TodoType, 'uuid' | 'content'>) => void,
+    removeTodo: ({ uuid }: TodoId) => void
 }
 
 export const Todos: React.FC<Props> = ({ todos, removeTodo, setCompleted, setTitle }) => {
@@ -14,16 +14,16 @@ export const Todos: React.FC<Props> = ({ todos, removeTodo, setCompleted, setTit
 
     return (
         <ul className="my-4">
-            {todos.map(({ id, title, completed }) => (
+            {todos.map(({ uuid, content, completed }) => (
                 <li
-                    key={id}
-                    onDoubleClick={() => { setIsEditing(id) }}
+                    key={uuid}
+                    onDoubleClick={() => { setIsEditing(uuid) }}
                     className={`${completed ? 'opacity-[0.65] line-through' : ''}`}
                 >
                     <Todo
-                        key={id}
-                        id={id}
-                        title={title}
+                        key={uuid}
+                        uuid={uuid}
+                        content={content}
                         completed={completed}
                         isEditing={IsEditing}
                         removeTodo={removeTodo}

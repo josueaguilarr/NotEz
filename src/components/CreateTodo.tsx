@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { TodoTitle } from "../types/types"
+import { TodoContent } from "../types/types"
 
 interface Props {
-    saveTodo: ({ title }: TodoTitle) => void
+    saveTodo: ({ content }: TodoContent) => void
 }
 
 export const CreateTodo: React.FC<Props> = ({ saveTodo }) => {
@@ -10,7 +10,7 @@ export const CreateTodo: React.FC<Props> = ({ saveTodo }) => {
 
     const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e): void => {
         if (e.key === 'Enter' && inputValue !== '') {
-            saveTodo({ title: inputValue })
+            saveTodo({ content: inputValue })
             setInputValue("")
         }
     }
