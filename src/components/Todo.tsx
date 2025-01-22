@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { TodoId, type Todo as TodoType } from "../types/types";
 import { SuccessIcon } from "../icons/Icons";
+import { ActionsTodo } from "./ActionsTodo";
 
 interface Props extends Pick<TodoType, "uuid" | "content" | "completed"> {
   isEditing: string;
   setIsEditing: (completed: string) => void;
-  setCompleted: ({ uuid, completed }: Pick<TodoType, "uuid" | "completed">) => void;
+  setCompleted: ({
+    uuid,
+    completed,
+  }: Pick<TodoType, "uuid" | "completed">) => void;
   setTitle: ({ uuid, content }: Pick<TodoType, "uuid" | "content">) => void;
   removeTodo: ({ uuid }: TodoId) => void;
 }
@@ -20,6 +24,23 @@ export const Todo: React.FC<Props> = ({
   setIsEditing,
 }) => {
   const [EditedTitle, setEditedTitle] = useState(content);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  const handleRemove = () => {
+    setTimeout(() => {
+      const currentTodo = document.getElementById(uuid);
+      currentTodo?.classList.remove("animate-fadeIn");
+      currentTodo?.classList.add("animate-fadeOut");
+
+      currentTodo?.addEventListener("animationend", () => {
+        currentTodo.remove();
+        removeTodo({ uuid });
+      });
+    });
+  };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (
     e
@@ -82,6 +103,13 @@ export const Todo: React.FC<Props> = ({
             setIsEditing("");
           }}
         ></textarea>
+        
+        <ActionsTodo
+          isModalOpen={isModalOpen}
+          handleRemove={handleRemove}
+          openModal={openModal}
+          closeModal={closeModal}
+        />
       </div>
     </>
   );
