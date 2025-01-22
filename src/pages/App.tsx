@@ -2,38 +2,41 @@ import { useEffect, useState } from "react";
 import { Todos } from "../components/Todos";
 import {
   FilterValue,
-  TodoTitle,
+  TodoContent,
   Todo as TodoType,
   type TodoId,
+  type Group,
 } from "../types/types";
 import { TODO_FILTERS } from "../consts/consts";
 import { ActionBar } from "../components/ActionBar";
 import { Header } from "../components/Header";
 import { CreateTodo } from "../components/CreateTodo";
 import { Groups } from "../components/Groups";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_API_URL,
+  import.meta.env.VITE_SUPABASE_API_KEY
+);
 
 export const App = (): JSX.Element => {
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [filterSelected, setFilterSelected] = useState<FilterValue>(
     TODO_FILTERS.ALL
   );
+  const [groups, setGroups] = useState<Group[]>([]);
 
-  const handleUpdateLocalStorage = (newTodos: TodoType[]): void => {
-    localStorage.setItem("todos", JSON.stringify(newTodos));
-  };
-
-  const handleRemoveTodo = ({ id }: TodoId): void => {
-    const newTodos = todos.filter((todo) => todo.id !== id);
+  const handleRemoveTodo = ({ uuid }: TodoId): void => {
+    const newTodos = todos.filter((todo) => todo.uuid !== uuid);
     setTodos(newTodos);
-    handleUpdateLocalStorage(newTodos);
   };
 
   const handleCompleted = ({
-    id,
+    uuid,
     completed,
-  }: Pick<TodoType, "id" | "completed">): void => {
+  }: Pick<TodoType, "uuid" | "completed">): void => {
     const newTodos = todos.map((todo) => {
-      if (todo.id === id) {
+      if (todo.uuid === uuid) {
         return {
           ...todo,
           completed,
@@ -44,7 +47,6 @@ export const App = (): JSX.Element => {
     });
 
     setTodos(newTodos);
-    handleUpdateLocalStorage(newTodos);
   };
 
   const handleFilterChange = (filter: FilterValue): void => {
@@ -54,27 +56,26 @@ export const App = (): JSX.Element => {
   const handleRemoveAllCompleted = (): void => {
     const newTodos = todos.filter((todo) => !todo.completed);
     setTodos(newTodos);
-    handleUpdateLocalStorage(newTodos);
   };
 
-  const handleAddTodo = ({ title }: TodoTitle): void => {
-    const newTodo = {
-      title,
-      id: crypto.randomUUID(),
-      completed: false,
-    };
+  const handleAddTodo = async ({ content }: TodoContent): Promise<void> => {
+    const { data, error } = await supabase
+      .from("Notes")
+      .insert([{ content: content }])
+      .select();
 
-    const newTodos = [...todos, newTodo];
+    if (error) return;
+
+    const newTodos = [...todos, data[0]];
     setTodos(newTodos);
-    handleUpdateLocalStorage(newTodos);
   };
 
   const handleUpdateTitle = ({
-    id,
-    title,
-  }: Pick<TodoType, "id" | "title">): void => {
+    uuid,
+    content,
+  }: Pick<TodoType, "uuid" | "content">): void => {
     setTodos((todos) =>
-      todos.map((todo) => (todo.id === id ? { ...todo, title: title } : todo))
+      todos.map((todo) => (todo.uuid === uuid ? { ...todo, content } : todo))
     );
   };
 
@@ -88,15 +89,21 @@ export const App = (): JSX.Element => {
     return todo;
   });
 
+  const getNotes = async () => {
+    const { data } = await supabase.from("Notes").select("*");
+
+    if (data) setTodos(data);
+  };
+
+  const getGroups = async () => {
+    const { data } = await supabase.from("Groups").select();
+
+    if (data) setGroups(data);
+  };
+
   useEffect(() => {
-    const todosSaved = localStorage.getItem("todos");
-
-    if (todosSaved) {
-      setTodos(JSON.parse(todosSaved));
-      return;
-    }
-
-    localStorage.setItem("todos", JSON.stringify([]));
+    getNotes();
+    getGroups();
   }, []);
 
   return (
@@ -106,7 +113,7 @@ export const App = (): JSX.Element => {
 
         <CreateTodo saveTodo={handleAddTodo} />
 
-        <Groups />
+        <Groups groups={groups} />
 
         <ActionBar
           activeCount={activeCount}
