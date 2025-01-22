@@ -20,22 +20,33 @@ const supabase = createClient(
 );
 
 export const App = (): JSX.Element => {
-  const [todos, setTodos] = useState<TodoType[]>([]);
+  const [notes, setNotes] = useState<TodoType[]>([]);
   const [filterSelected, setFilterSelected] = useState<FilterValue>(
     TODO_FILTERS.ALL
   );
   const [groups, setGroups] = useState<Group[]>([]);
 
-  const handleRemoveTodo = ({ uuid }: TodoId): void => {
-    const newTodos = todos.filter((todo) => todo.uuid !== uuid);
-    setTodos(newTodos);
+  const handleRemoveTodo = async ({ uuid }: TodoId): Promise<void> => {
+    const { error } = await supabase.from("Notes").delete().eq("uuid", uuid);
+
+    if (error) return;
+
+    const newNotes = notes.filter((todo) => todo.uuid !== uuid);
+    setNotes(newNotes);
   };
 
-  const handleCompleted = ({
+  const handleCompleted = async ({
     uuid,
     completed,
-  }: Pick<TodoType, "uuid" | "completed">): void => {
-    const newTodos = todos.map((todo) => {
+  }: Pick<TodoType, "uuid" | "completed">): Promise<void> => {
+    const { error } = await supabase
+      .from("Notes")
+      .update({ completed: completed })
+      .eq("uuid", uuid);
+
+    if (error) return;
+
+    const newNotes = notes.map((todo) => {
       if (todo.uuid === uuid) {
         return {
           ...todo,
@@ -46,16 +57,23 @@ export const App = (): JSX.Element => {
       return todo;
     });
 
-    setTodos(newTodos);
+    setNotes(newNotes);
   };
 
-  const handleFilterChange = (filter: FilterValue): void => {
-    setFilterSelected(filter);
-  };
+  const handleRemoveAllCompleted = async (): Promise<void> => {
+    const notesRemove = notes
+      .filter((note) => note.completed)
+      .map((note) => note.uuid);
 
-  const handleRemoveAllCompleted = (): void => {
-    const newTodos = todos.filter((todo) => !todo.completed);
-    setTodos(newTodos);
+    const { error } = await supabase
+      .from("Notes")
+      .delete()
+      .in("uuid", notesRemove);
+
+    if (error) return;
+
+    const newNotes = notes.filter((note) => !note.completed);
+    setNotes(newNotes);
   };
 
   const handleAddTodo = async ({ content }: TodoContent): Promise<void> => {
@@ -66,33 +84,40 @@ export const App = (): JSX.Element => {
 
     if (error) return;
 
-    const newTodos = [...todos, data[0]];
-    setTodos(newTodos);
+    const newNotes = [...notes, data[0]];
+    setNotes(newNotes);
   };
 
-  const handleUpdateTitle = ({
+  const handleUpdateTitle = async ({
     uuid,
     content,
-  }: Pick<TodoType, "uuid" | "content">): void => {
-    setTodos((todos) =>
-      todos.map((todo) => (todo.uuid === uuid ? { ...todo, content } : todo))
-    );
+  }: Pick<TodoType, "uuid" | "content">): Promise<void> => {
+
+    const { error } = await supabase
+      .from("Notes")
+      .update({ content: content })
+      .eq("uuid", uuid)
+
+    if(error) return;
+
+    const newNotes = notes.map((note) => {
+      if (note.uuid === uuid) {
+        return {
+          ...note,
+          content,
+        };
+      }
+
+      return note;
+    });
+
+    setNotes(newNotes);
   };
-
-  const activeCount = todos.filter((todo) => !todo.completed).length;
-  const completedCount = todos.length - activeCount;
-
-  const filteredTodos = todos.filter((todo) => {
-    if (filterSelected === TODO_FILTERS.ACTIVE) return !todo.completed;
-    if (filterSelected === TODO_FILTERS.COMPLETED) return todo.completed;
-
-    return todo;
-  });
 
   const getNotes = async () => {
     const { data } = await supabase.from("Notes").select("*");
 
-    if (data) setTodos(data);
+    if (data) setNotes(data);
   };
 
   const getGroups = async () => {
@@ -100,6 +125,17 @@ export const App = (): JSX.Element => {
 
     if (data) setGroups(data);
   };
+
+  const filteredTodos = notes.filter((todo) => {
+    if (filterSelected === TODO_FILTERS.ACTIVE) return !todo.completed;
+    if (filterSelected === TODO_FILTERS.COMPLETED) return todo.completed;
+
+    return todo;
+  });
+
+  const handleFilterChange = (filter: FilterValue) => setFilterSelected(filter);
+  const activeCount = notes.filter((todo) => !todo.completed).length;
+  const completedCount = notes.length - activeCount;
 
   useEffect(() => {
     getNotes();
