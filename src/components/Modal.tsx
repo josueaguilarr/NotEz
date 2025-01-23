@@ -1,10 +1,9 @@
-import React from "react";
+import { PropsWithChildren } from "react";
 
-interface Props {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode;
-}
+} & PropsWithChildren;
 
 export const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
