@@ -4,8 +4,6 @@ import { SuccessIcon } from "../icons/Icons";
 import { ActionsTodo } from "./ActionsTodo";
 
 interface Props extends Pick<TodoType, "uuid" | "content" | "completed"> {
-  isEditing: string;
-  setIsEditing: (completed: string) => void;
   setCompleted: ({
     uuid,
     completed,
@@ -21,7 +19,6 @@ export const Todo: React.FC<Props> = ({
   removeTodo,
   setCompleted,
   setTitle,
-  setIsEditing,
 }) => {
   const [EditedTitle, setEditedTitle] = useState(content);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -42,26 +39,15 @@ export const Todo: React.FC<Props> = ({
     });
   };
 
-  const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (
-    e
-  ) => {
-    if (e.key === "Enter") {
-      setEditedTitle(EditedTitle.trim());
+  const handleSaveContent = () => {
+    if (EditedTitle !== content) setTitle({ uuid, content: EditedTitle.trim() });
 
-      if (EditedTitle !== content) {
-        setTitle({ uuid, content: EditedTitle });
-      }
-
-      if (EditedTitle === "") removeTodo({ uuid });
-
-      setIsEditing("");
-    }
-
-    if (e.key === "Escape") {
-      setEditedTitle(content);
-      setIsEditing("");
-    }
+    if (EditedTitle === "") removeTodo({ uuid });
   };
+
+  const handleChangeContent: React.ChangeEventHandler<HTMLTextAreaElement> = ({
+    target,
+  }) => setEditedTitle(target.value);
 
   return (
     <>
@@ -95,15 +81,10 @@ export const Todo: React.FC<Props> = ({
         <textarea
           className="w-full bg-transparent rounded-md p-1 font-medium text-lg focus:outline-none resize-none"
           value={EditedTitle}
-          onChange={(e) => {
-            setEditedTitle(e.target.value);
-          }}
-          onKeyDown={handleKeyDown}
-          onBlur={() => {
-            setIsEditing("");
-          }}
+          onChange={handleChangeContent}
+          onBlur={handleSaveContent}
         ></textarea>
-        
+
         <ActionsTodo
           isModalOpen={isModalOpen}
           handleRemove={handleRemove}
