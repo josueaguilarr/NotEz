@@ -79,7 +79,7 @@ export const Todo: React.FC<Props> = ({
         </div>
 
         <textarea
-          className="w-full bg-transparent rounded-md p-1 font-medium text-lg focus:outline-none resize-none"
+          className={`w-full bg-transparent rounded-md p-1 font-medium text-lg focus:outline-none resize-none ${completed ? 'opacity-[0.65] line-through' : ''}`}
           value={EditedTitle}
           onChange={handleChangeContent}
           onBlur={handleSaveContent}

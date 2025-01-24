@@ -14,7 +14,6 @@ export const Todos: React.FC<Props> = ({ todos, removeTodo, setCompleted, setTit
             {todos.map(({ uuid, content, completed }) => (
                 <li
                     key={uuid}
-                    className={`${completed ? 'opacity-[0.65] line-through' : ''}`}
                 >
                     <Todo
                         key={uuid}
