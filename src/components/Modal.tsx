@@ -1,4 +1,5 @@
 import { PropsWithChildren } from "react";
+import { CancelIcon } from "../icons/Icons";
 
 type Props = {
   isOpen: boolean;
@@ -10,19 +11,19 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+      className="fixed top-0 inset-0 sm:p-0 p-10 overflow-x-hidden bg-gray-800/50 flex items-center justify-center z-50"
       onClick={onClose}
     >
       <div
-        className="bg-neutral-800 rounded-lg shadow-lg max-w-md w-full p-6 relative"
+        className="bg-neutral-800 max-w-md max-h-[300px] overflow-y-auto scrollbar-custom rounded-lg shadow-lg w-full p-6 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute top-2 right-4 text-gray-400 hover:text-gray-600"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
           onClick={onClose}
           aria-label="Close modal"
         >
-          ×
+          <CancelIcon className="size-5" />
         </button>
         {children}
       </div>

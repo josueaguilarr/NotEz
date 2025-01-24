@@ -5,3 +5,7 @@
 textarea {
   field-sizing: content;
 }
+
+.scrollbar-custom{
+  scrollbar-width: none;
+}
