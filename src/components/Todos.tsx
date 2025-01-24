@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { type Todo as TodoType, type TodoId } from "../types/types"
 import { Todo } from "./Todo"
 
