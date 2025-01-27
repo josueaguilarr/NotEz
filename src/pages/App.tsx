@@ -144,7 +144,7 @@ export const App = (): JSX.Element => {
 
   return (
     <main className="top-0 z-[-2] w-full bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] min-h-screen flex justify-center sm:items-start">
-      <section className="w-1/2 text-gray-200 mx-4 my-16 sm:my-10">
+      <section className="sm:w-1/2 w-4/5 text-gray-200 mx-4 my-16 sm:my-10">
         <Header sbClient={supabase} />
 
         <CreateTodo saveTodo={handleAddTodo} />
