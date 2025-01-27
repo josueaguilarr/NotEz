@@ -164,6 +164,7 @@ export const App = (): JSX.Element => {
           setCompleted={handleCompleted}
           setTitle={handleUpdateTitle}
           removeTodo={handleRemoveTodo}
+          groups={groups}
         />
       </section>
     </main>

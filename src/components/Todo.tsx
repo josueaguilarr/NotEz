@@ -10,6 +10,7 @@ interface Props extends Pick<TodoType, "uuid" | "content" | "completed"> {
   }: Pick<TodoType, "uuid" | "completed">) => void;
   setTitle: ({ uuid, content }: Pick<TodoType, "uuid" | "content">) => void;
   removeTodo: ({ uuid }: TodoId) => void;
+  openModal: () => void
 }
 
 export const Todo: React.FC<Props> = ({
@@ -19,12 +20,9 @@ export const Todo: React.FC<Props> = ({
   removeTodo,
   setCompleted,
   setTitle,
+  openModal
 }) => {
   const [EditedTitle, setEditedTitle] = useState(content);
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
 
   const handleRemove = () => {
     setTimeout(() => {
@@ -86,10 +84,8 @@ export const Todo: React.FC<Props> = ({
         ></textarea>
 
         <ActionsTodo
-          isModalOpen={isModalOpen}
           handleRemove={handleRemove}
           openModal={openModal}
-          closeModal={closeModal}
         />
       </div>
     </>
