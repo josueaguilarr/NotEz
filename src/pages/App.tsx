@@ -25,7 +25,7 @@ export const App = (): JSX.Element => {
     TODO_FILTERS.ALL
   );
   const [groups, setGroups] = useState<Group[]>([]);
-
+  
   const handleRemoveTodo = async ({ uuid }: TodoId): Promise<void> => {
     const { error } = await supabase.from("Notes").delete().eq("uuid", uuid);
 
@@ -117,7 +117,7 @@ export const App = (): JSX.Element => {
   const getNotes = async () => {
     const { data } = await supabase.from("Notes").select("*");
 
-    if (data) setNotes(data);
+    if (data) setNotes(data);    
   };
 
   const getGroups = async () => {
@@ -135,11 +135,11 @@ export const App = (): JSX.Element => {
 
   const handleFilterChange = (filter: FilterValue) => setFilterSelected(filter);
   const activeCount = notes.filter((todo) => !todo.completed).length;
-  const completedCount = notes.length - activeCount;
+  const completedCount = notes.length - activeCount;  
 
   useEffect(() => {
     getNotes();
-    getGroups();
+    getGroups();    
   }, []);
 
   return (
@@ -165,6 +165,7 @@ export const App = (): JSX.Element => {
           setTitle={handleUpdateTitle}
           removeTodo={handleRemoveTodo}
           groups={groups}
+          sbClient={supabase}
         />
       </section>
     </main>
