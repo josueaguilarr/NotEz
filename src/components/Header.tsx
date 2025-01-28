@@ -1,44 +1,29 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Title } from "./Title";
-import { useEffect, useState } from "react";
 import { GithubIcon } from "../icons/Icons";
 
 type Props = {
   sbClient: SupabaseClient;
+  isAuthenticated: boolean;
+  handleAuthenticated: () => void
 };
 
-export const Header: React.FC<Props> = ({ sbClient }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+export const Header: React.FC<Props> = ({ sbClient, isAuthenticated, handleAuthenticated }) => {  
   const signInWithGithub = async (): Promise<void> => {
     const { error } = await sbClient.auth.signInWithOAuth({
       provider: "github",
     });
 
     if (error) return;
+    handleAuthenticated()
   };
 
-  const signOutGithub = async (): Promise<void> => {
+  const signOutGithub = async (): Promise<void> => {    
     const { error } = await sbClient.auth.signOut();
 
     if (error) return;
-
-    await isUserAuthenticated();
+    handleAuthenticated();
   };
-
-  const isUserAuthenticated = async () => {
-    const { data } = await sbClient.auth.getSession();
-
-    if (data.session) {
-      setIsAuthenticated(!isAuthenticated);
-    } else {
-      setIsAuthenticated(false);
-    }
-  };
-
-  useEffect(() => {
-    isUserAuthenticated();
-  }, []);
 
   return (
     <header className="flex items-center justify-between mb-16">
