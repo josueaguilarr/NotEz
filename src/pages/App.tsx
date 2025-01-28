@@ -38,8 +38,14 @@ export const App = (): JSX.Element => {
       getDataFromLocalStorage();
     }
   };
-  
+
   const handleRemoveTodo = async ({ uuid }: TodoId): Promise<void> => {
+    isAuthenticated
+      ? await handleRemoveTodoSP({ uuid })
+      : handleRemoveTodoLocalStorage({ uuid });
+  };
+
+  const handleRemoveTodoSP = async ({ uuid }: TodoId): Promise<void> => {
     const { error } = await supabase.from("Notes").delete().eq("uuid", uuid);
 
     if (error) return;
@@ -90,6 +96,12 @@ export const App = (): JSX.Element => {
   };
 
   const handleAddTodo = async ({ content }: TodoContent): Promise<void> => {
+    isAuthenticated
+      ? await handleAddTodoSP({ content })
+      : handleAddTodoLocalStorage({ content });
+  };
+
+  const handleAddTodoSP = async ({ content }: TodoContent): Promise<void> => {
     const { data, error } = await supabase
       .from("Notes")
       .insert([{ content: content }])
@@ -102,6 +114,21 @@ export const App = (): JSX.Element => {
   };
 
   const handleUpdateTitle = async ({
+    uuid,
+    content,
+  }: Pick<TodoType, "uuid" | "content">): Promise<void> => {
+    isAuthenticated
+      ? await handleUpdateTitleSP({
+          uuid,
+          content,
+        })
+      : handleUpdateTitleLocalStorage({
+          uuid,
+          content,
+        });
+  };
+
+  const handleUpdateTitleSP = async ({
     uuid,
     content,
   }: Pick<TodoType, "uuid" | "content">): Promise<void> => {
@@ -138,14 +165,53 @@ export const App = (): JSX.Element => {
     if (data) setGroups(data);
   };
 
+  const getNotesLocalStorage = () => {
+    const storedNotes = localStorage.getItem("notes");
+    const notes = storedNotes ? JSON.parse(storedNotes) : [];
+    setNotes(notes);
+  };
+
+  const handleAddTodoLocalStorage = ({ content }: TodoContent): void => {
+    const newTodo: Pick<TodoType, "uuid" | "content" | "completed"> = {
+      uuid: crypto.randomUUID(),
+      content,
+      completed: false,
+    };
+
+    const storedNotes = JSON.parse(localStorage.getItem("notes") || "[]");
+    const newNotes = [...storedNotes, newTodo];
+    localStorage.setItem("notes", JSON.stringify(newNotes));
+    setNotes(newNotes);
+  };
+
+  const handleUpdateTitleLocalStorage = ({
+    uuid,
+    content,
+  }: Pick<TodoType, "uuid" | "content">): void => {
+    const storedNotes = JSON.parse(localStorage.getItem("notes") || "[]");
+    const newNotes = storedNotes.map((note: TodoType) =>
+      note.uuid === uuid ? { ...note, content } : note
+    );
+
+    localStorage.setItem("notes", JSON.stringify(newNotes));
+    setNotes(newNotes);
+  };
+
+  const handleRemoveTodoLocalStorage = ({ uuid }: TodoId): void => {
+    const storedNotes = JSON.parse(localStorage.getItem("notes") || "[]");
+    const newNotes = storedNotes.filter((todo: TodoType) => todo.uuid !== uuid);
+
+    localStorage.setItem("notes", JSON.stringify(newNotes));
+    setNotes(newNotes);
+  };
+
   const getDataFromDatabase = () => {
     getGroups();
     getNotes();
   };
 
   const getDataFromLocalStorage = () => {
-    setGroups([]);
-    setNotes([]);
+    getNotesLocalStorage();
   };
 
   const filteredTodos = notes.filter((todo) => {
@@ -159,14 +225,18 @@ export const App = (): JSX.Element => {
   const activeCount = notes.filter((todo) => !todo.completed).length;
   const completedCount = notes.length - activeCount;
 
-  useEffect(() => {    
+  useEffect(() => {
     isUserAuthenticated();
   }, []);
 
   return (
     <main className="top-0 z-[-2] w-full bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] min-h-screen flex justify-center sm:items-start">
       <section className="sm:w-1/2 w-4/5 text-gray-200 mx-4 my-16 sm:my-10">
-        <Header sbClient={supabase} isAuthenticated={isAuthenticated} handleAuthenticated={isUserAuthenticated} />
+        <Header
+          sbClient={supabase}
+          isAuthenticated={isAuthenticated}
+          handleAuthenticated={isUserAuthenticated}
+        />
 
         <CreateTodo saveTodo={handleAddTodo} />
 
