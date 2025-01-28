@@ -1,11 +1,13 @@
 import { CancelIcon, MoreIcon, TrashIcon } from "../icons/Icons";
 
 interface Props {
+  isAuthenticated: boolean;
   handleRemove: () => void;
   openModal: () => void;
 }
 
 export const ActionsTodo: React.FC<Props> = ({
+  isAuthenticated,
   handleRemove,
   openModal,
 }) => {
@@ -22,13 +24,16 @@ export const ActionsTodo: React.FC<Props> = ({
                 <TrashIcon className="size-3" />
                 Eliminar
               </p>
-              <p
-                onClick={openModal}
-                className="flex gap-1 items-center text-[10px] hover:bg-neutral-800 p-1 rounded-md duration-200 cursor-pointer"
-              >
-                <CancelIcon className="size-3 rotate-45" />
-                Agregar a grupo
-              </p>
+
+              {isAuthenticated && (
+                <p
+                  onClick={openModal}
+                  className="flex gap-1 items-center text-[10px] hover:bg-neutral-800 p-1 rounded-md duration-200 cursor-pointer"
+                >
+                  <CancelIcon className="size-3 rotate-45" />
+                  Agregar a grupo
+                </p>
+              )}
             </div>
           </div>
           <span>

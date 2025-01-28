@@ -14,6 +14,7 @@ interface Props extends Pick<TodoType, "uuid" | "content" | "completed" | "id_gr
   }: Pick<TodoType, "uuid" | "completed">) => void;
   setTitle: ({ uuid, content }: Pick<TodoType, "uuid" | "content">) => void;
   removeTodo: ({ uuid }: TodoId) => void;
+  isAuthenticated: boolean;
 }
 
 export const Todo: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const Todo: React.FC<Props> = ({
   id_group,
   sbClient, 
   groups,
+  isAuthenticated,
   removeTodo,
   setCompleted,
   setTitle,
@@ -110,7 +112,7 @@ export const Todo: React.FC<Props> = ({
           onBlur={handleSaveContent}
         ></textarea>
 
-        <ActionsTodo handleRemove={handleRemove} openModal={openModal} />
+        <ActionsTodo handleRemove={handleRemove} openModal={openModal} isAuthenticated={isAuthenticated} />
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} id={`modal-note-${uuid}`}>

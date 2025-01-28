@@ -248,6 +248,7 @@ export const App = (): JSX.Element => {
           filterSelected={filterSelected}
           onClearCompleted={handleRemoveAllCompleted}
           handleFilterChange={handleFilterChange}
+          isAuthenticated={isAuthenticated}
         />
 
         <Todos
@@ -257,6 +258,7 @@ export const App = (): JSX.Element => {
           removeTodo={handleRemoveTodo}
           groups={groups}
           sbClient={supabase}
+          isAuthenticated={isAuthenticated}
         />
       </section>
     </main>

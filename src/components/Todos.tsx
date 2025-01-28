@@ -11,7 +11,8 @@ interface Props {
   }: Pick<TodoType, "uuid" | "completed">) => void;
   setTitle: ({ uuid, content }: Pick<TodoType, "uuid" | "content">) => void;
   removeTodo: ({ uuid }: TodoId) => void;
-  sbClient: SupabaseClient
+  sbClient: SupabaseClient;
+  isAuthenticated: boolean;
 }
 
 export const Todos: React.FC<Props> = ({
@@ -20,7 +21,8 @@ export const Todos: React.FC<Props> = ({
   removeTodo,
   setCompleted,
   setTitle,
-  sbClient
+  sbClient,
+  isAuthenticated,
 }) => {
   return (
     <>
@@ -38,6 +40,7 @@ export const Todos: React.FC<Props> = ({
               removeTodo={removeTodo}
               setCompleted={setCompleted}
               setTitle={setTitle}
+              isAuthenticated={isAuthenticated}
             />
           </li>
         ))}

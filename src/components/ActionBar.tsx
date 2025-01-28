@@ -5,6 +5,7 @@ interface Props {
   activeCount: number;
   completedCount: number;
   filterSelected: FilterValue;
+  isAuthenticated: boolean;
   onClearCompleted: () => void;
   handleFilterChange: (filter: FilterValue) => void;
 }
@@ -13,6 +14,7 @@ export const ActionBar: React.FC<Props> = ({
   activeCount = 0,
   completedCount = 0,
   filterSelected,
+  isAuthenticated,
   onClearCompleted,
   handleFilterChange,
 }) => {
@@ -41,7 +43,7 @@ export const ActionBar: React.FC<Props> = ({
           />
         )}
 
-        {completedCount > 0 && (
+        {isAuthenticated && completedCount > 0 && (
           <button
             className="px-2 rounded-full text-sm font-medium bg-red-900 text-red-300"
             onClick={onClearCompleted}
