@@ -33,8 +33,12 @@ export const App = (): JSX.Element => {
     setIsAuthenticated(isLoggedIn);
 
     if (isLoggedIn) {
+      console.log("entro en db");
+
       getDataFromDatabase();
     } else {
+      console.log("entro en localstorage");
+
       getDataFromLocalStorage();
     }
   };
@@ -55,6 +59,15 @@ export const App = (): JSX.Element => {
   };
 
   const handleCompleted = async ({
+    uuid,
+    completed,
+  }: Pick<TodoType, "uuid" | "completed">): Promise<void> => {
+    isAuthenticated
+      ? await handleCompletedTodoSP({ uuid, completed })
+      : handleCompletedTodoLocalStorage({ uuid, completed });
+  };
+
+  const handleCompletedTodoSP = async ({
     uuid,
     completed,
   }: Pick<TodoType, "uuid" | "completed">): Promise<void> => {
@@ -200,6 +213,20 @@ export const App = (): JSX.Element => {
   const handleRemoveTodoLocalStorage = ({ uuid }: TodoId): void => {
     const storedNotes = JSON.parse(localStorage.getItem("notes") || "[]");
     const newNotes = storedNotes.filter((todo: TodoType) => todo.uuid !== uuid);
+
+    localStorage.setItem("notes", JSON.stringify(newNotes));
+    setNotes(newNotes);
+  };
+
+  const handleCompletedTodoLocalStorage = async ({
+    uuid,
+    completed,
+  }: Pick<TodoType, "uuid" | "completed">): Promise<void> => {
+    const storedNotes = JSON.parse(localStorage.getItem("notes") || "[]");
+
+    const newNotes = storedNotes.map((todo: TodoType) =>
+      todo.uuid === uuid ? { ...todo, completed } : todo
+    );
 
     localStorage.setItem("notes", JSON.stringify(newNotes));
     setNotes(newNotes);
