@@ -25,7 +25,7 @@ export const ActionBar: React.FC<Props> = ({
     <footer className="flex justify-between gap-7 sm:flex-row flex-col mt-4 mb-6">
       {activeCount > 0 && (
         <>
-          <span className="max-w-1/4">
+          <span className="max-w-1/4 truncate">
             <span>
               <strong>{activeCount}</strong> {activeTodoWord} pendiente
               {!singleActiveCount && "s"}

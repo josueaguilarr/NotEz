@@ -267,7 +267,7 @@ export const App = (): JSX.Element => {
 
         <CreateTodo saveTodo={handleAddTodo} />
 
-        <Groups groups={groups} />
+        {isAuthenticated && <Groups groups={groups} />}
 
         <ActionBar
           activeCount={activeCount}
