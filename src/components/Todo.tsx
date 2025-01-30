@@ -3,10 +3,8 @@ import { Group, TodoId, type Todo as TodoType } from "../types/types";
 import { SuccessIcon } from "../icons/Icons";
 import { ActionsTodo } from "./ActionsTodo";
 import { Modal } from "./Modal";
-import { SupabaseClient } from "@supabase/supabase-js";
 
 interface Props extends Pick<TodoType, "uuid" | "content" | "completed" | "id_group"> {
-  sbClient: SupabaseClient,
   groups: Group[],
   setCompleted: ({
     uuid,
@@ -15,6 +13,7 @@ interface Props extends Pick<TodoType, "uuid" | "content" | "completed" | "id_gr
   setTitle: ({ uuid, content }: Pick<TodoType, "uuid" | "content">) => void;
   removeTodo: ({ uuid }: TodoId) => void;
   isAuthenticated: boolean;
+moveNoteToGroup: ({ id_group, uuid }: Pick<TodoType, "id_group" | "uuid">) => void;
 }
 
 export const Todo: React.FC<Props> = ({
@@ -22,12 +21,12 @@ export const Todo: React.FC<Props> = ({
   content,
   completed,
   id_group,
-  sbClient, 
   groups,
   isAuthenticated,
   removeTodo,
   setCompleted,
   setTitle,
+  moveNoteToGroup,
 }) => {
   const [EditedTitle, setEditedTitle] = useState(content);
   const [selectedGroup, setSelectedGroup] = useState<number | null>(id_group);
@@ -40,12 +39,7 @@ export const Todo: React.FC<Props> = ({
     
     if (selectedGroup == id_group) return;
     
-    const { error } = await sbClient
-      .from("Notes")
-      .update({ id_group: selectedGroup })
-      .eq("uuid", uuid)
-
-    if (error) return;
+    moveNoteToGroup({ id_group: selectedGroup, uuid });
   };
 
   const handleCheckboxChange = (groupId: number) => setSelectedGroup((prev) => (prev === groupId ? null : groupId));

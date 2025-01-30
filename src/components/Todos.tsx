@@ -1,6 +1,5 @@
 import { type Todo as TodoType, type TodoId, Group } from "../types/types";
 import { Todo } from "./Todo";
-import { SupabaseClient } from "@supabase/supabase-js";
 
 interface Props {
   todos: TodoType[];
@@ -11,8 +10,8 @@ interface Props {
   }: Pick<TodoType, "uuid" | "completed">) => void;
   setTitle: ({ uuid, content }: Pick<TodoType, "uuid" | "content">) => void;
   removeTodo: ({ uuid }: TodoId) => void;
-  sbClient: SupabaseClient;
   isAuthenticated: boolean;
+  moveNoteToGroup: ({ id_group, uuid }: Pick<TodoType, "id_group" | "uuid">) => void;
 }
 
 export const Todos: React.FC<Props> = ({
@@ -21,9 +20,9 @@ export const Todos: React.FC<Props> = ({
   removeTodo,
   setCompleted,
   setTitle,
-  sbClient,
   isAuthenticated,
-}) => {
+  moveNoteToGroup,
+}) => {  
   return (
     <>
       <ul className="my-4">
@@ -35,12 +34,12 @@ export const Todos: React.FC<Props> = ({
               content={content}
               completed={completed}
               id_group={id_group}
-              sbClient={sbClient}
               groups={groups}
               removeTodo={removeTodo}
               setCompleted={setCompleted}
               setTitle={setTitle}
               isAuthenticated={isAuthenticated}
+              moveNoteToGroup={moveNoteToGroup}
             />
           </li>
         ))}
