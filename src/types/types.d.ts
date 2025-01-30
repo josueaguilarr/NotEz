@@ -14,6 +14,11 @@ export interface Group {
     created_at: string,
 }
 
+export type NoteUuid = string;
+export type NoteCompleted = boolean;
+export type NoteContent = string;
+export type NoteGroup = number | null;
+
 export type TodoId = Pick<Todo, 'uuid'>
 export type TodoContent = Pick<Todo, 'content'>
 export type TodoCompleted = Pick<Todo, 'completed'>
