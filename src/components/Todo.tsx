@@ -4,8 +4,9 @@ import { SuccessIcon } from "../icons/Icons";
 import { ActionsTodo } from "./ActionsTodo";
 import { Modal } from "./Modal";
 
-interface Props extends Pick<TodoType, "uuid" | "content" | "completed" | "id_group"> {
-  groups: Group[],
+interface Props
+  extends Pick<TodoType, "uuid" | "content" | "completed" | "id_group"> {
+  groups: Group[];
   setCompleted: ({
     uuid,
     completed,
@@ -13,7 +14,10 @@ interface Props extends Pick<TodoType, "uuid" | "content" | "completed" | "id_gr
   setTitle: ({ uuid, content }: Pick<TodoType, "uuid" | "content">) => void;
   removeTodo: ({ uuid }: TodoId) => void;
   isAuthenticated: boolean;
-moveNoteToGroup: ({ id_group, uuid }: Pick<TodoType, "id_group" | "uuid">) => void;
+  moveNoteToGroup: ({
+    id_group,
+    uuid,
+  }: Pick<TodoType, "id_group" | "uuid">) => void;
 }
 
 export const Todo: React.FC<Props> = ({
@@ -32,17 +36,18 @@ export const Todo: React.FC<Props> = ({
   const [selectedGroup, setSelectedGroup] = useState<number | null>(id_group);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => setModalOpen(!isModalOpen)
+  const openModal = () => setModalOpen(!isModalOpen);
 
-  const closeModal = async () => {    
+  const closeModal = async () => {
     setModalOpen(!isModalOpen);
-    
+
     if (selectedGroup == id_group) return;
-    
+
     moveNoteToGroup({ id_group: selectedGroup, uuid });
   };
 
-  const handleCheckboxChange = (groupId: number) => setSelectedGroup((prev) => (prev === groupId ? null : groupId));
+  const handleCheckboxChange = (groupId: number) =>
+    setSelectedGroup((prev) => (prev === groupId ? null : groupId));
 
   const handleRemove = () => {
     setTimeout(() => {
@@ -106,10 +111,21 @@ export const Todo: React.FC<Props> = ({
           onBlur={handleSaveContent}
         ></textarea>
 
-        <ActionsTodo handleRemove={handleRemove} openModal={openModal} isAuthenticated={isAuthenticated} />
+        <ActionsTodo
+          uuid={uuid}
+          handleRemove={handleRemove}
+          openModal={openModal}
+          isAuthenticated={isAuthenticated}
+          isGroupSelected={selectedGroup}
+          moveNoteToGroup={moveNoteToGroup}
+        />
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal} id={`modal-note-${uuid}`}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        id={`modal-note-${uuid}`}
+      >
         <h2 className="text-2xl font-bold mb-6">Tus grupos</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {groups.map(({ id, group_name }, index) => (

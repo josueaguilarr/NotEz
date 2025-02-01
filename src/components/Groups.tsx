@@ -18,7 +18,7 @@ export const Groups: React.FC<Props> = ({
           onClick={() => groupSelected === id ? setGroupSelected({ id_group: null }) : setGroupSelected({ id_group: id })}
           key={id}
           className={`snap-center rounded-lg max-w-[200px] bg-neutral-800/40 p-2 cursor-pointer hover:bg-neutral-800/80 duration-500 border-neutral-800/60 border ${
-            groupSelected === id ? "bg-neutral-500/30" : ""
+            groupSelected === id ? "bg-neutral-500/40" : ""
           }`}
         >
           <div className="flex items-center justify-between gap-2">
