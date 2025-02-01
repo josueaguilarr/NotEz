@@ -109,8 +109,8 @@ export const App = (): JSX.Element => {
   const moveNoteToGroup = ({
     id_group,
     uuid,
-  }: Pick<TodoType, "id_group" | "uuid">) => {
-    handleMoveNoteToGroup({ id_group, uuid, setNotes });
+  }: Pick<TodoType, "id_group" | "uuid">) => {    
+    handleMoveNoteToGroup({ id_group, uuid, setNotes, groupSelected });
   };
 
   const filteredTodos = notes.filter((todo) => {

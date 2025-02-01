@@ -98,7 +98,8 @@ export const handleMoveNoteToGroup = async ({
     id_group,
     uuid,
     setNotes,
-}: { id_group: NoteGroup; uuid: NoteUuid; setNotes: (notes: TodoType[]) => void; }) => {
+    groupSelected
+}: { id_group: NoteGroup; uuid: NoteUuid; setNotes: (notes: TodoType[]) => void; groupSelected: NoteGroup }) => {
     const { error } = await supabase
         .from("Notes")
         .update({ id_group: id_group })
@@ -106,7 +107,7 @@ export const handleMoveNoteToGroup = async ({
 
     if (error) return;
 
-    await getNotes({ setNotes });
+    await getNotes({ setNotes, groupSelected });
 };
 
 export const handleRemoveTodoSP = async ({ uuid, notes, setNotes }: { uuid: string; notes: TodoType[]; setNotes: (notes: TodoType[]) => void }): Promise<void> => {
