@@ -30,7 +30,10 @@ export const ActionBar: React.FC<Props> = ({
           <span className="max-w-1/4 truncate">
             <span>
               <strong>{activeCount}</strong> {activeTodoWord} pendiente
-              {!singleActiveCount && "s"} {currentGroupName !== '' ? `en ${currentGroupName}` : ''}
+              {!singleActiveCount && "s"}{" "} {currentGroupName !== "" ? "en" : ""}
+              <strong className="gradientText text-lg">
+                {currentGroupName !== "" ? ` ${currentGroupName}` : ""}
+              </strong>
             </span>
           </span>
         </>

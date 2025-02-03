@@ -9,3 +9,27 @@ textarea {
 .scrollbar-custom{
   scrollbar-width: none;
 }
+
+.gradientText {
+  background-image: linear-gradient(
+    225deg,
+    #3178C6 30%,
+    #6DD5FA 65%,
+    #184E8E 100%
+  );
+
+  background-size: 200%;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shine 2s linear infinite alternate;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
