@@ -10,15 +10,15 @@ export const Groups: React.FC<Props> = ({
   groups,
   groupSelected,
   setGroupSelected,
-}) => {    
+}) => {      
   return (
-    <div className="flex h-[40px] w-full mt-2 gap-2 overflow-auto will-change-scroll snap-x [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-500/40">
+    <div className="flex h-[40px] w-full mt-2 mb-10 gap-2 overflow-auto will-change-scroll snap-x [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-500/40">
       {groups.map(({ id, group_name }) => (
         <div
           onClick={() => groupSelected === id ? setGroupSelected({ id_group: null }) : setGroupSelected({ id_group: id })}
           key={id}
           className={`snap-center rounded-lg max-w-[200px] bg-neutral-800/40 p-2 cursor-pointer hover:bg-neutral-800/80 duration-500 border-neutral-800/60 border ${
-            groupSelected === id ? "bg-neutral-500/40" : ""
+            groupSelected === id ? "bg-neutral-500/50" : ""
           }`}
         >
           <div className="flex items-center justify-between gap-2">

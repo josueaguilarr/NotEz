@@ -6,6 +6,7 @@ interface Props {
   completedCount: number;
   filterSelected: FilterValue;
   isAuthenticated: boolean;
+  currentGroupName: string | undefined;
   onClearCompleted: () => void;
   handleFilterChange: (filter: FilterValue) => void;
 }
@@ -15,6 +16,7 @@ export const ActionBar: React.FC<Props> = ({
   completedCount = 0,
   filterSelected,
   isAuthenticated,
+  currentGroupName,
   onClearCompleted,
   handleFilterChange,
 }) => {
@@ -28,7 +30,7 @@ export const ActionBar: React.FC<Props> = ({
           <span className="max-w-1/4 truncate">
             <span>
               <strong>{activeCount}</strong> {activeTodoWord} pendiente
-              {!singleActiveCount && "s"}
+              {!singleActiveCount && "s"} {currentGroupName !== '' ? `en ${currentGroupName}` : ''}
             </span>
           </span>
         </>

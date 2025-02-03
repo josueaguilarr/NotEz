@@ -98,7 +98,7 @@ export const App = (): JSX.Element => {
   const handleNotesForGroup = async ({
     id_group,
   }: Pick<TodoType, "id_group">) => {
-    setGroupSelected(id_group)
+    setGroupSelected(id_group);
     await getNotes({ setNotes, groupSelected: id_group });
   };
 
@@ -109,7 +109,7 @@ export const App = (): JSX.Element => {
   const moveNoteToGroup = ({
     id_group,
     uuid,
-  }: Pick<TodoType, "id_group" | "uuid">) => {    
+  }: Pick<TodoType, "id_group" | "uuid">) => {
     handleMoveNoteToGroup({ id_group, uuid, setNotes, groupSelected });
   };
 
@@ -123,6 +123,8 @@ export const App = (): JSX.Element => {
   const handleFilterChange = (filter: FilterValue) => setFilterSelected(filter);
   const activeCount = notes.filter((todo) => !todo.completed).length;
   const completedCount = notes.length - activeCount;
+  const currentGroupName =
+    groupSelected != null ? groups.at(groupSelected - 1)?.group_name : "";
 
   useEffect(() => {
     isUserAuthenticated();
@@ -151,9 +153,10 @@ export const App = (): JSX.Element => {
           activeCount={activeCount}
           completedCount={completedCount}
           filterSelected={filterSelected}
+          isAuthenticated={isAuthenticated}
+          currentGroupName={currentGroupName}
           onClearCompleted={handleRemoveCompleted}
           handleFilterChange={handleFilterChange}
-          isAuthenticated={isAuthenticated}
         />
 
         <Todos
