@@ -12,6 +12,7 @@ export interface Group {
     id: number,
     group_name: string,
     created_at: string,
+    has_pending: boolean
 }
 
 export type NoteUuid = string;

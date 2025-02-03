@@ -23,8 +23,8 @@ export const getNotes = async ({ setNotes, groupSelected = null }: { setNotes: (
 };
 
 export const getGroups = async ({ setGroups }: { setGroups: (groups: Group[]) => void }) => {
-    const { data } = await supabase.from("Groups").select();
-
+    const { data } = await supabase.rpc('get_groups_with_pending');
+    
     if (data) setGroups(data);
 };
 
