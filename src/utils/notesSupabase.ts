@@ -71,8 +71,9 @@ export const handleCompletedTodoSP = async ({
     uuid,
     completed,
     notes,
-    setNotes
-}: { uuid: NoteUuid; completed: NoteCompleted; notes: TodoType[]; setNotes: (notes: TodoType[]) => void }): Promise<void> => {
+    setNotes,
+    setGroups
+}: { uuid: NoteUuid; completed: NoteCompleted; notes: TodoType[]; setNotes: (notes: TodoType[]) => void; setGroups: (groups: Group[]) => void }): Promise<void> => {
     const { error } = await supabase
         .from("Notes")
         .update({ completed: completed })
@@ -92,6 +93,7 @@ export const handleCompletedTodoSP = async ({
     });
 
     setNotes(newNotes);
+    await getGroups({ setGroups })
 };
 
 export const handleMoveNoteToGroup = async ({

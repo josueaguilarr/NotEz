@@ -67,6 +67,7 @@ export const App = (): JSX.Element => {
           completed,
           notes,
           setNotes,
+          setGroups,
         })
       : handleCompletedTodoLocalStorage({ uuid, completed, setNotes });
   };
