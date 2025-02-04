@@ -83,7 +83,7 @@ export const Note: React.FC<Props> = ({
         <div className="flex items-center gap-4">
           <label
             className="relative flex cursor-pointer items-center rounded-md"
-            htmlFor={`checkbox-${uuid}`}
+            htmlFor={`note-checkbox-${uuid}`}
           >
             <input
               type="checkbox"
@@ -92,7 +92,7 @@ export const Note: React.FC<Props> = ({
               onChange={(e) =>
                 setCompleted({ uuid, completed: e.target.checked })
               }
-              id={`checkbox-${uuid}`}
+              id={`note-checkbox-${uuid}`}
             />
             {completed && (
               <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
@@ -140,14 +140,14 @@ export const Note: React.FC<Props> = ({
             >
               <label
                 className="relative flex cursor-pointer items-center rounded-md"
-                htmlFor={`checkbox-${id}`}
+                htmlFor={`groups-${id}`}
               >
                 <input
                   type="checkbox"
                   className={`before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-9 before:w-9 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-[#3178c6] checked:bg-[#3178c6] checked:before:bg-[#3178c6] hover:before:opacity-10`}
                   checked={selectedGroup === id}
                   onChange={() => handleCheckboxChange(id)}
-                  id={`checkbox-${id}`}
+                  id={`groups-${id}`}
                 />
                 {selectedGroup === id && (
                   <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">

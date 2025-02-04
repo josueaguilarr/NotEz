@@ -31,7 +31,7 @@ export const Header: React.FC<Props> = ({ sbClient, isAuthenticated, handleAuthe
 
       <button
         onClick={isAuthenticated ? signOutGithub : signInWithGithub}
-        className="flex gap-1 items-center text-neutral-200 bg-[#3178C6] font-semibold px-2.5 py-1.5 rounded-md hover:scale-105 duration-300"
+        className="flex gap-1 items-center text-neutral-100 bg-[#2b68a8] font-semibold px-2.5 py-1.5 rounded-md hover:scale-105 duration-300"
       >
         
         {!isAuthenticated && <GithubIcon className="size-[14px]" />}
