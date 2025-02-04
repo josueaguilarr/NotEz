@@ -162,6 +162,7 @@ export const App = (): JSX.Element => {
 
         <Notes
           notes={filteredNotes}
+          selectedGroupName={currentGroupName}
           setCompleted={handleCompleted}
           setTitle={handleUpdateTitle}
           removeNote={handleRemoveNote}
