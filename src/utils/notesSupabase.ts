@@ -1,6 +1,6 @@
 import { supabase } from "../pages/App";
 import {
-    Todo as TodoType,
+    Note,
     type Group,
     NoteUuid,
     NoteCompleted,
@@ -8,12 +8,12 @@ import {
     NoteGroup
 } from "../types/types";
 
-export const getDataFromDatabase = ({ setGroups, setNotes }: { setGroups: (groups: Group[]) => void; setNotes: (notes: TodoType[]) => void }) => {
+export const getDataFromDatabase = ({ setGroups, setNotes }: { setGroups: (groups: Group[]) => void; setNotes: (notes: Note[]) => void }) => {
     getGroups({ setGroups });
     getNotes({ setNotes });
 };
 
-export const getNotes = async ({ setNotes, groupSelected = null }: { setNotes: (notes: TodoType[]) => void; groupSelected?: number | null }) => {
+export const getNotes = async ({ setNotes, groupSelected = null }: { setNotes: (notes: Note[]) => void; groupSelected?: number | null }) => {
     const { data } = await supabase.from("Notes").select("*");
     if (!data) return;
 
@@ -28,7 +28,7 @@ export const getGroups = async ({ setGroups }: { setGroups: (groups: Group[]) =>
     if (data) setGroups(data);
 };
 
-export const handleAddTodoSP = async ({ content, notes, setNotes }: { content: NoteContent, notes: TodoType[]; setNotes: (notes: TodoType[]) => void }): Promise<void> => {
+export const handleAddNoteSP = async ({ content, notes, setNotes }: { content: NoteContent, notes: Note[]; setNotes: (notes: Note[]) => void }): Promise<void> => {
     const { data, error } = await supabase
         .from("Notes")
         .insert([{ content: content }])
@@ -45,7 +45,7 @@ export const handleUpdateTitleSP = async ({
     content,
     notes,
     setNotes
-}: { uuid: NoteUuid, content: NoteContent, notes: TodoType[]; setNotes: (notes: TodoType[]) => void }): Promise<void> => {
+}: { uuid: NoteUuid, content: NoteContent, notes: Note[]; setNotes: (notes: Note[]) => void }): Promise<void> => {
     const { error } = await supabase
         .from("Notes")
         .update({ content: content })
@@ -67,13 +67,13 @@ export const handleUpdateTitleSP = async ({
     setNotes(newNotes);
 };
 
-export const handleCompletedTodoSP = async ({
+export const handleCompletedNoteSP = async ({
     uuid,
     completed,
     notes,
     setNotes,
     setGroups
-}: { uuid: NoteUuid; completed: NoteCompleted; notes: TodoType[]; setNotes: (notes: TodoType[]) => void; setGroups: (groups: Group[]) => void }): Promise<void> => {
+}: { uuid: NoteUuid; completed: NoteCompleted; notes: Note[]; setNotes: (notes: Note[]) => void; setGroups: (groups: Group[]) => void }): Promise<void> => {
     const { error } = await supabase
         .from("Notes")
         .update({ completed: completed })
@@ -81,15 +81,15 @@ export const handleCompletedTodoSP = async ({
 
     if (error) return;
 
-    const newNotes = notes.map((todo) => {
-        if (todo.uuid === uuid) {
+    const newNotes = notes.map((note) => {
+        if (note.uuid === uuid) {
             return {
-                ...todo,
+                ...note,
                 completed,
             };
         }
 
-        return todo;
+        return note;
     });
 
     setNotes(newNotes);
@@ -101,7 +101,7 @@ export const handleMoveNoteToGroup = async ({
     uuid,
     setNotes,
     groupSelected
-}: { id_group: NoteGroup; uuid: NoteUuid; setNotes: (notes: TodoType[]) => void; groupSelected: NoteGroup }) => {
+}: { id_group: NoteGroup; uuid: NoteUuid; setNotes: (notes: Note[]) => void; groupSelected: NoteGroup }) => {
     const { error } = await supabase
         .from("Notes")
         .update({ id_group: id_group })
@@ -112,16 +112,16 @@ export const handleMoveNoteToGroup = async ({
     await getNotes({ setNotes, groupSelected });
 };
 
-export const handleRemoveTodoSP = async ({ uuid, notes, setNotes }: { uuid: string; notes: TodoType[]; setNotes: (notes: TodoType[]) => void }): Promise<void> => {
+export const handleRemoveNoteSP = async ({ uuid, notes, setNotes }: { uuid: string; notes: Note[]; setNotes: (notes: Note[]) => void }): Promise<void> => {
     const { error } = await supabase.from("Notes").delete().eq("uuid", uuid);
 
     if (error) return;
 
-    const newNotes = notes.filter((todo) => todo.uuid !== uuid);
+    const newNotes = notes.filter((note) => note.uuid !== uuid);
     setNotes(newNotes);
 };
 
-export const handleRemoveAllCompleted = async ({ notes, setNotes }: { notes: TodoType[]; setNotes: (notes: TodoType[]) => void }): Promise<void> => {
+export const handleRemoveAllCompleted = async ({ notes, setNotes }: { notes: Note[]; setNotes: (notes: Note[]) => void }): Promise<void> => {
     const notesRemove = notes
         .filter((note) => note.completed)
         .map((note) => note.uuid);

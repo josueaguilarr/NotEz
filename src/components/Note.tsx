@@ -1,33 +1,33 @@
 import { useState } from "react";
-import { Group, TodoId, type Todo as TodoType } from "../types/types";
+import { Group, NoteIdPick, Note as NoteType } from "../types/types";
 import { SuccessIcon } from "../icons/Icons";
-import { ActionsTodo } from "./ActionsTodo";
+import { ActionsNote } from "./ActionsNote";
 import { Modal } from "./Modal";
 
 interface Props
-  extends Pick<TodoType, "uuid" | "content" | "completed" | "id_group"> {
+  extends Pick<NoteType, "uuid" | "content" | "completed" | "id_group"> {
   groups: Group[];
+  isAuthenticated: boolean;
   setCompleted: ({
     uuid,
     completed,
-  }: Pick<TodoType, "uuid" | "completed">) => void;
-  setTitle: ({ uuid, content }: Pick<TodoType, "uuid" | "content">) => void;
-  removeTodo: ({ uuid }: TodoId) => void;
-  isAuthenticated: boolean;
+  }: Pick<NoteType, "uuid" | "completed">) => void;
+  setTitle: ({ uuid, content }: Pick<NoteType, "uuid" | "content">) => void;
+  removeNote: ({ uuid }: NoteIdPick) => void;
   moveNoteToGroup: ({
     id_group,
     uuid,
-  }: Pick<TodoType, "id_group" | "uuid">) => void;
+  }: Pick<NoteType, "id_group" | "uuid">) => void;
 }
 
-export const Todo: React.FC<Props> = ({
+export const Note: React.FC<Props> = ({
   uuid,
   content,
   completed,
   id_group,
   groups,
   isAuthenticated,
-  removeTodo,
+  removeNote,
   setCompleted,
   setTitle,
   moveNoteToGroup,
@@ -51,13 +51,13 @@ export const Todo: React.FC<Props> = ({
 
   const handleRemove = () => {
     setTimeout(() => {
-      const currentTodo = document.getElementById(uuid);
-      currentTodo?.classList.remove("animate-fadeIn");
-      currentTodo?.classList.add("animate-fadeOut");
+      const currentNote = document.getElementById(uuid);
+      currentNote?.classList.remove("animate-fadeIn");
+      currentNote?.classList.add("animate-fadeOut");
 
-      currentTodo?.addEventListener("animationend", () => {
-        currentTodo.remove();
-        removeTodo({ uuid });
+      currentNote?.addEventListener("animationend", () => {
+        currentNote.remove();
+        removeNote({ uuid });
       });
     });
   };
@@ -66,7 +66,7 @@ export const Todo: React.FC<Props> = ({
     if (EditedTitle !== content)
       setTitle({ uuid, content: EditedTitle.trim() });
 
-    if (EditedTitle === "") removeTodo({ uuid });
+    if (EditedTitle === "") removeNote({ uuid });
   };
 
   const handleChangeContent: React.ChangeEventHandler<HTMLTextAreaElement> = ({
@@ -111,7 +111,7 @@ export const Todo: React.FC<Props> = ({
           onBlur={handleSaveContent}
         ></textarea>
 
-        <ActionsTodo
+        <ActionsNote
           uuid={uuid}
           handleRemove={handleRemove}
           openModal={openModal}

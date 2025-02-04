@@ -21,7 +21,7 @@ export const ActionBar: React.FC<Props> = ({
   handleFilterChange,
 }) => {
   const singleActiveCount = activeCount === 1;
-  const activeTodoWord = singleActiveCount ? "tarea" : "tareas";
+  const activeTaskWord = singleActiveCount ? "tarea" : "tareas";
 
   return (
     <footer className="flex justify-between gap-7 sm:flex-row flex-col mt-4 mb-6">
@@ -29,7 +29,7 @@ export const ActionBar: React.FC<Props> = ({
         <>
           <span className="max-w-1/4 truncate">
             <span>
-              <strong>{activeCount}</strong> {activeTodoWord} pendiente
+              <strong>{activeCount}</strong> {activeTaskWord} pendiente
               {!singleActiveCount && "s"}{" "} {currentGroupName !== "" ? "en" : ""}
               <strong className="gradientText text-lg">
                 {currentGroupName !== "" ? ` ${currentGroupName}` : ""}

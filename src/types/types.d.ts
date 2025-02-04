@@ -1,6 +1,6 @@
-import { TODO_FILTERS } from "../consts/consts"
+import { NOTE_FILTERS } from "../consts/consts"
 
-export interface Todo {
+export interface Note {
     uuid: string,
     content: string,
     id_group: number | null,
@@ -20,8 +20,8 @@ export type NoteCompleted = boolean;
 export type NoteContent = string;
 export type NoteGroup = number | null;
 
-export type TodoId = Pick<Todo, 'uuid'>
-export type TodoContent = Pick<Todo, 'content'>
-export type TodoCompleted = Pick<Todo, 'completed'>
+export type NoteIdPick = Pick<Note, 'uuid'>
+export type NoteContentPick = Pick<Note, 'content'>
+export type NoteCompletedPick = Pick<Note, 'completed'>
 
-export type FilterValue= typeof TODO_FILTERS[keyof typeof TODO_FILTERS]
+export type FilterValue= typeof NOTE_FILTERS[keyof typeof NOTE_FILTERS]

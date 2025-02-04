@@ -1,5 +1,5 @@
 import { CancelIcon, MoreIcon, TrashIcon } from "../icons/Icons";
-import { Todo } from "../types/types";
+import { Note } from "../types/types";
 
 interface Props {
   isAuthenticated: boolean;
@@ -10,10 +10,10 @@ interface Props {
   moveNoteToGroup: ({
     id_group,
     uuid,
-  }: Pick<Todo, "id_group" | "uuid">) => void;
+  }: Pick<Note, "id_group" | "uuid">) => void;
 }
 
-export const ActionsTodo: React.FC<Props> = ({
+export const ActionsNote: React.FC<Props> = ({
   isAuthenticated,
   isGroupSelected,
   uuid,

@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
-import { Todos } from "../components/Todos";
-import { FilterValue, TodoContent, Todo as TodoType, type TodoId, type Group } from "../types/types";
-import { TODO_FILTERS } from "../consts/consts";
+import { Notes } from "../components/Notes";
+import { FilterValue, NoteContentPick, Note, type NoteIdPick, type Group } from "../types/types";
+import { NOTE_FILTERS } from "../consts/consts";
 import { ActionBar } from "../components/ActionBar";
 import { Header } from "../components/Header";
-import { CreateTodo } from "../components/CreateTodo";
+import { CreateNote } from "../components/CreateNote";
 import { Groups } from "../components/Groups";
 import { createClient } from "@supabase/supabase-js";
 import {
   getDataFromDatabase,
   getNotes,
-  handleRemoveTodoSP,
-  handleCompletedTodoSP,
-  handleAddTodoSP,
+  handleRemoveNoteSP,
+  handleCompletedNoteSP,
+  handleAddNoteSP,
   handleUpdateTitleSP,
   handleRemoveAllCompleted,
   handleMoveNoteToGroup,
 } from "../utils/notesSupabase";
 import {
   getDataFromLocalStorage,
-  handleRemoveTodoLocalStorage,
-  handleCompletedTodoLocalStorage,
-  handleAddTodoLocalStorage,
+  handleRemoveNoteLocalStorage,
+  handleCompletedNoteLocalStorage,
+  handleAddNoteLocalStorage,
   handleUpdateTitleLocalStorage,
 } from "../utils/notesLocalStorage";
 
@@ -31,9 +31,9 @@ export const supabase = createClient(
 );
 
 export const App = (): JSX.Element => {
-  const [notes, setNotes] = useState<TodoType[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [filterSelected, setFilterSelected] = useState<FilterValue>(
-    TODO_FILTERS.ALL
+    NOTE_FILTERS.ALL
   );
   const [groups, setGroups] = useState<Group[]>([]);
   const [groupSelected, setGroupSelected] = useState<number | null>(null);
@@ -51,31 +51,31 @@ export const App = (): JSX.Element => {
     }
   };
 
-  const handleAddTodo = async ({ content }: TodoContent): Promise<void> => {
+  const handleAddNote = async ({ content }: NoteContentPick): Promise<void> => {
     isAuthenticated
-      ? await handleAddTodoSP({ content, notes, setNotes })
-      : handleAddTodoLocalStorage({ content, setNotes });
+      ? await handleAddNoteSP({ content, notes, setNotes })
+      : handleAddNoteLocalStorage({ content, setNotes });
   };
 
   const handleCompleted = async ({
     uuid,
     completed,
-  }: Pick<TodoType, "uuid" | "completed">): Promise<void> => {
+  }: Pick<Note, "uuid" | "completed">): Promise<void> => {
     isAuthenticated
-      ? await handleCompletedTodoSP({
+      ? await handleCompletedNoteSP({
           uuid,
           completed,
           notes,
           setNotes,
           setGroups,
         })
-      : handleCompletedTodoLocalStorage({ uuid, completed, setNotes });
+      : handleCompletedNoteLocalStorage({ uuid, completed, setNotes });
   };
 
   const handleUpdateTitle = async ({
     uuid,
     content,
-  }: Pick<TodoType, "uuid" | "content">): Promise<void> => {
+  }: Pick<Note, "uuid" | "content">): Promise<void> => {
     isAuthenticated
       ? await handleUpdateTitleSP({
           uuid,
@@ -90,15 +90,15 @@ export const App = (): JSX.Element => {
         });
   };
 
-  const handleRemoveTodo = async ({ uuid }: TodoId): Promise<void> => {
+  const handleRemoveNote = async ({ uuid }: NoteIdPick): Promise<void> => {
     isAuthenticated
-      ? await handleRemoveTodoSP({ uuid, notes, setNotes })
-      : handleRemoveTodoLocalStorage({ uuid, setNotes });
+      ? await handleRemoveNoteSP({ uuid, notes, setNotes })
+      : handleRemoveNoteLocalStorage({ uuid, setNotes });
   };
 
   const handleNotesForGroup = async ({
     id_group,
-  }: Pick<TodoType, "id_group">) => {
+  }: Pick<Note, "id_group">) => {
     setGroupSelected(id_group);
     await getNotes({ setNotes, groupSelected: id_group });
   };
@@ -110,19 +110,19 @@ export const App = (): JSX.Element => {
   const moveNoteToGroup = ({
     id_group,
     uuid,
-  }: Pick<TodoType, "id_group" | "uuid">) => {
+  }: Pick<Note, "id_group" | "uuid">) => {
     handleMoveNoteToGroup({ id_group, uuid, setNotes, groupSelected });
   };
 
-  const filteredTodos = notes.filter((todo) => {
-    if (filterSelected === TODO_FILTERS.ACTIVE) return !todo.completed;
-    if (filterSelected === TODO_FILTERS.COMPLETED) return todo.completed;
+  const filteredNotes = notes.filter((note) => {
+    if (filterSelected === NOTE_FILTERS.ACTIVE) return !note.completed;
+    if (filterSelected === NOTE_FILTERS.COMPLETED) return note.completed;
 
-    return todo;
+    return note;
   });
 
   const handleFilterChange = (filter: FilterValue) => setFilterSelected(filter);
-  const activeCount = notes.filter((todo) => !todo.completed).length;
+  const activeCount = notes.filter((note) => !note.completed).length;
   const completedCount = notes.length - activeCount;
   const currentGroupName =
     groupSelected != null ? groups.at(groupSelected - 1)?.group_name : "";
@@ -140,7 +140,7 @@ export const App = (): JSX.Element => {
           handleAuthenticated={isUserAuthenticated}
         />
 
-        <CreateTodo saveTodo={handleAddTodo} />
+        <CreateNote saveNote={handleAddNote} />
 
         {isAuthenticated && (
           <Groups
@@ -160,11 +160,11 @@ export const App = (): JSX.Element => {
           handleFilterChange={handleFilterChange}
         />
 
-        <Todos
-          todos={filteredTodos}
+        <Notes
+          notes={filteredNotes}
           setCompleted={handleCompleted}
           setTitle={handleUpdateTitle}
-          removeTodo={handleRemoveTodo}
+          removeNote={handleRemoveNote}
           moveNoteToGroup={moveNoteToGroup}
           groups={groups}
           isAuthenticated={isAuthenticated}

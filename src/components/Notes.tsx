@@ -1,41 +1,41 @@
-import { type Todo as TodoType, type TodoId, Group } from "../types/types";
-import { Todo } from "./Todo";
+import { Note as NoteType, type NoteIdPick, Group } from "../types/types";
+import { Note } from "./Note";
 
 interface Props {
-  todos: TodoType[];
+  notes: NoteType[];
   groups: Group[];
+  isAuthenticated: boolean;
   setCompleted: ({
     uuid,
     completed,
-  }: Pick<TodoType, "uuid" | "completed">) => void;
-  setTitle: ({ uuid, content }: Pick<TodoType, "uuid" | "content">) => void;
-  removeTodo: ({ uuid }: TodoId) => void;
-  isAuthenticated: boolean;
-  moveNoteToGroup: ({ id_group, uuid }: Pick<TodoType, "id_group" | "uuid">) => void;
+  }: Pick<NoteType, "uuid" | "completed">) => void;
+  setTitle: ({ uuid, content }: Pick<NoteType, "uuid" | "content">) => void;
+  removeNote: ({ uuid }: NoteIdPick) => void;
+  moveNoteToGroup: ({ id_group, uuid }: Pick<NoteType, "id_group" | "uuid">) => void;
 }
 
-export const Todos: React.FC<Props> = ({
-  todos,
+export const Notes: React.FC<Props> = ({
+  notes,
   groups,
-  removeTodo,
+  isAuthenticated,
+  removeNote,
   setCompleted,
   setTitle,
-  isAuthenticated,
   moveNoteToGroup,
 }) => {  
   return (
     <>
       <ul className="my-4">
-        {todos.map(({ uuid, content, completed, id_group }) => (
+        {notes.map(({ uuid, content, completed, id_group }) => (
           <li key={uuid}>
-            <Todo
+            <Note
               key={uuid}
               uuid={uuid}
               content={content}
               completed={completed}
               id_group={id_group}
               groups={groups}
-              removeTodo={removeTodo}
+              removeNote={removeNote}
               setCompleted={setCompleted}
               setTitle={setTitle}
               isAuthenticated={isAuthenticated}

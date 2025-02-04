@@ -1,16 +1,16 @@
 import { useState } from "react"
-import { TodoContent } from "../types/types"
+import { NoteContentPick } from "../types/types"
 
 interface Props {
-    saveTodo: ({ content }: TodoContent) => void
+    saveNote: ({ content }: NoteContentPick) => void
 }
 
-export const CreateTodo: React.FC<Props> = ({ saveTodo }) => {
+export const CreateNote: React.FC<Props> = ({ saveNote }) => {
     const [inputValue, setInputValue] = useState('')
 
     const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e): void => {
         if (e.key === 'Enter' && inputValue !== '') {
-            saveTodo({ content: inputValue })
+            saveNote({ content: inputValue })
             setInputValue("")
         }
     }

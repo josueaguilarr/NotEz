@@ -1,9 +1,9 @@
-import { Group, Todo as TodoType } from "../types/types";
+import { Group, Note } from "../types/types";
 
 interface Props {
   groups: Group[];
   groupSelected: number | null;
-  setGroupSelected: ({ id_group }: Pick<TodoType, "id_group">) => void;
+  setGroupSelected: ({ id_group }: Pick<Note, "id_group">) => void;
 }
 
 export const Groups: React.FC<Props> = ({
