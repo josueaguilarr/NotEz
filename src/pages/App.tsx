@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Notes } from "../components/Notes";
-import { FilterValue, NoteContentPick, Note, type NoteIdPick, type Group } from "../types/types";
+import { FilterValue, NoteContentPick, Note, type NoteIdPick, type Group, GroupName } from "../types/types";
 import { NOTE_FILTERS } from "../consts/consts";
 import { ActionBar } from "../components/ActionBar";
 import { Header } from "../components/Header";
@@ -16,6 +16,7 @@ import {
   handleUpdateTitleSP,
   handleRemoveAllCompleted,
   handleMoveNoteToGroup,
+  handleAddGroupSP,
 } from "../utils/notesSupabase";
 import {
   getDataFromLocalStorage,
@@ -107,6 +108,10 @@ export const App = (): JSX.Element => {
     handleRemoveAllCompleted({ notes, setNotes });
   };
 
+  const handleAddGroup = ({ group }: { group: GroupName }) => {
+    handleAddGroupSP({ group, groups, setGroups });
+  };
+
   const moveNoteToGroup = ({
     id_group,
     uuid,
@@ -124,8 +129,9 @@ export const App = (): JSX.Element => {
   const handleFilterChange = (filter: FilterValue) => setFilterSelected(filter);
   const activeCount = notes.filter((note) => !note.completed).length;
   const completedCount = notes.length - activeCount;
-  const currentGroupName =
-    groupSelected != null ? groups.at(groupSelected - 1)?.group_name : "";
+  const currentGroupName = groups.find(
+    (group) => group.id === groupSelected
+  )?.group_name;
 
   useEffect(() => {
     isUserAuthenticated();
@@ -147,6 +153,7 @@ export const App = (): JSX.Element => {
             groups={groups}
             groupSelected={groupSelected}
             setGroupSelected={handleNotesForGroup}
+            setAddGroup={handleAddGroup}
           />
         )}
 
