@@ -5,7 +5,8 @@ import {
     NoteUuid,
     NoteCompleted,
     NoteContent,
-    NoteGroup
+    NoteGroup,
+    GroupName
 } from "../types/types";
 
 export const getDataFromDatabase = ({ setGroups, setNotes }: { setGroups: (groups: Group[]) => void; setNotes: (notes: Note[]) => void }) => {
@@ -23,7 +24,7 @@ export const getNotes = async ({ setNotes, groupSelected = null }: { setNotes: (
 };
 
 export const getGroups = async ({ setGroups }: { setGroups: (groups: Group[]) => void }) => {
-    const { data } = await supabase.rpc('get_groups_with_pending');
+    const { data } = await supabase.rpc('get_groups_with_pending').order("created_at", { ascending: false });
     
     if (data) setGroups(data);
 };
@@ -136,3 +137,17 @@ export const handleRemoveAllCompleted = async ({ notes, setNotes }: { notes: Not
     const newNotes = notes.filter((note) => !note.completed);
     setNotes(newNotes);
 };
+
+export const handleAddGroupSP = async ({ group, setGroups }: { group: GroupName, groups: Group[], setGroups: (groups: Group[]) => void }) => {
+    const { data, error } = await supabase
+        .from('Groups')
+        .insert([
+            { group_name: group },
+        ])
+        .select()
+
+    console.log(data);
+    if (error) return;
+
+    getGroups({ setGroups })
+}

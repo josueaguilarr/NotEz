@@ -19,6 +19,7 @@ export type NoteUuid = string;
 export type NoteCompleted = boolean;
 export type NoteContent = string;
 export type NoteGroup = number | null;
+export type GroupName = string;
 
 export type NoteIdPick = Pick<Note, 'uuid'>
 export type NoteContentPick = Pick<Note, 'content'>
