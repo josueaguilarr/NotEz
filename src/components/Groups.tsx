@@ -28,7 +28,7 @@ export const Groups: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex h-[40px] w-full mt-2 mb-10 gap-2 overflow-auto will-change-scroll [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-500/40">
+    <div className="flex h-[40px] w-full mt-2 mb-16 gap-2 overflow-auto will-change-scroll [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-500/40">
       <div
         className={`rounded-lg max-w-[200px] bg-neutral-800/40 px-2 py-1.5 cursor-pointer hover:bg-neutral-800/80 duration-500 border-neutral-600/70 border border-dashed`}
       >

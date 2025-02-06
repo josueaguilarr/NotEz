@@ -1,4 +1,5 @@
 import { FilterValue } from "../types/types";
+import { ActionsGroup } from "./ActionsGroup";
 import { Filters } from "./Filters";
 
 interface Props {
@@ -27,7 +28,7 @@ export const ActionBar: React.FC<Props> = ({
     <footer className="flex justify-between gap-7 sm:flex-row flex-col mt-4 mb-6">
       {activeCount > 0 && (
         <>
-          <span className="max-w-1/4 truncate">
+          <span className="max-w-1/4 truncate flex items-center gap-[2px]">
             <span>
               <strong>{activeCount}</strong> {activeTaskWord} pendiente
               {!singleActiveCount && "s"}{" "} {currentGroupName !== undefined ? "en" : ""}
@@ -56,6 +57,8 @@ export const ActionBar: React.FC<Props> = ({
             Borrar completados
           </button>
         )}
+
+        {activeCount > 0 && <ActionsGroup groupSelected={currentGroupName} />}
       </div>
     </footer>
   );
