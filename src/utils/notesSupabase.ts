@@ -29,6 +29,17 @@ export const getGroups = async ({ setGroups }: { setGroups: (groups: Group[]) =>
     if (data) setGroups(data);
 };
 
+export const handleUpdateTitleGroup = async ({ group_name, uuid, setGroups }: { group_name: GroupName, uuid: NoteUuid, setGroups: (groups: Group[]) => void }) => {    
+    const { error } = await supabase
+        .from('Groups')
+        .update({ group_name: group_name })
+        .eq('uuid', uuid)
+
+    if (error) throw new Error("Error to update title of group")
+    
+    getGroups({ setGroups })
+}
+
 export const handleAddNoteSP = async ({ content, notes, setNotes }: { content: NoteContent, notes: Note[]; setNotes: (notes: Note[]) => void }): Promise<void> => {
     const { data, error } = await supabase
         .from("Notes")

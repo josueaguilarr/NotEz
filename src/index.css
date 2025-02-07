@@ -23,6 +23,7 @@ textarea {
   background-clip: text;
   -webkit-background-clip: text;
   animation: shine 2s linear infinite alternate;
+  caret-color: #f7f7f7;
 }
 
 @keyframes shine {

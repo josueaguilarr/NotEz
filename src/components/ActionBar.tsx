@@ -1,4 +1,5 @@
-import { FilterValue } from "../types/types";
+import { useEffect, useRef, useState } from "react";
+import { FilterValue, Group } from "../types/types";
 import { ActionsGroup } from "./ActionsGroup";
 import { Filters } from "./Filters";
 
@@ -8,8 +9,13 @@ interface Props {
   filterSelected: FilterValue;
   isAuthenticated: boolean;
   currentGroupName: string | undefined;
+  currentGroupUuid: string | undefined;
   onClearCompleted: () => void;
   handleFilterChange: (filter: FilterValue) => void;
+  updateTitleGroup: ({
+    group_name,
+    uuid,
+  }: Pick<Group, "group_name" | "uuid">) => void;
 }
 
 export const ActionBar: React.FC<Props> = ({
@@ -18,11 +24,28 @@ export const ActionBar: React.FC<Props> = ({
   filterSelected,
   isAuthenticated,
   currentGroupName,
+  currentGroupUuid,
   onClearCompleted,
   handleFilterChange,
+  updateTitleGroup,
 }) => {
+  const [titleGroup, setTitleGroup] = useState<string | undefined>(
+    currentGroupName
+  );
+  const inputTitle = useRef<HTMLInputElement>(null);
+
   const singleActiveCount = activeCount === 1;
   const activeTaskWord = singleActiveCount ? "tarea" : "tareas";
+
+  const handleUpdateTitleGroup = () => {
+    if (titleGroup === undefined || currentGroupUuid === undefined) return;
+
+    updateTitleGroup({ group_name: titleGroup, uuid: currentGroupUuid });
+  };
+
+  useEffect(() => {
+    setTitleGroup(currentGroupName);
+  }, [currentGroupName]);
 
   return (
     <footer className="flex justify-between gap-7 sm:flex-row flex-col mt-4 mb-6">
@@ -31,10 +54,18 @@ export const ActionBar: React.FC<Props> = ({
           <span className="max-w-1/4 truncate flex items-center gap-[2px]">
             <span>
               <strong>{activeCount}</strong> {activeTaskWord} pendiente
-              {!singleActiveCount && "s"}{" "} {currentGroupName !== undefined ? "en" : ""}
-              <strong className="gradientText text-lg">
-                {currentGroupName !== undefined ? ` ${currentGroupName}` : ""}
-              </strong>
+              {!singleActiveCount && "s"}{" "}
+              {currentGroupName !== undefined ? "en" : ""}
+              <input
+                ref={inputTitle}
+                type="text"
+                value={titleGroup || ""}
+                onChange={(e) => {
+                  setTitleGroup(e.target.value);
+                }}
+                onBlur={handleUpdateTitleGroup}
+                className="ms-1 text-lg bg-transparent focus:outline-none font-bold gradientText"
+              />
             </span>
           </span>
         </>
@@ -58,7 +89,12 @@ export const ActionBar: React.FC<Props> = ({
           </button>
         )}
 
-        {activeCount > 0 && <ActionsGroup groupSelected={currentGroupName} />}
+        {activeCount > 0 && (
+          <ActionsGroup
+            groupSelected={currentGroupName}
+            focusInputTitle={() => inputTitle.current?.focus()}
+          />
+        )}
       </div>
     </footer>
   );

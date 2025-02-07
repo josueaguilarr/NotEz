@@ -10,6 +10,7 @@ export interface Note {
 
 export interface Group {
     id: number,
+    uuid: string,
     group_name: string,
     created_at: string,
     has_pending: boolean

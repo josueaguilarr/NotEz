@@ -17,6 +17,7 @@ import {
   handleRemoveAllCompleted,
   handleMoveNoteToGroup,
   handleAddGroupSP,
+  handleUpdateTitleGroup,
 } from "../utils/notesSupabase";
 import {
   getDataFromLocalStorage,
@@ -119,6 +120,13 @@ export const App = (): JSX.Element => {
     handleMoveNoteToGroup({ id_group, uuid, setNotes, groupSelected });
   };
 
+  const updateTitleGroup = ({
+    group_name,
+    uuid,
+  }: Pick<Group, "group_name" | "uuid">) => {
+    handleUpdateTitleGroup({ group_name, uuid, setGroups });
+  };
+
   const filteredNotes = notes.filter((note) => {
     if (filterSelected === NOTE_FILTERS.ACTIVE) return !note.completed;
     if (filterSelected === NOTE_FILTERS.COMPLETED) return note.completed;
@@ -129,10 +137,9 @@ export const App = (): JSX.Element => {
   const handleFilterChange = (filter: FilterValue) => setFilterSelected(filter);
   const activeCount = notes.filter((note) => !note.completed).length;
   const completedCount = notes.length - activeCount;
-  const currentGroupName = groups.find(
-    (group) => group.id === groupSelected
-  )?.group_name;
-
+  const { group_name: currentGroupName, uuid: currentGroupUuid } =
+    groups.find((group) => group.id === groupSelected) || {};
+  
   useEffect(() => {
     isUserAuthenticated();
   }, []);
@@ -163,8 +170,10 @@ export const App = (): JSX.Element => {
           filterSelected={filterSelected}
           isAuthenticated={isAuthenticated}
           currentGroupName={currentGroupName}
+          currentGroupUuid={currentGroupUuid}
           onClearCompleted={handleRemoveCompleted}
           handleFilterChange={handleFilterChange}
+          updateTitleGroup={updateTitleGroup}
         />
 
         <Notes
