@@ -40,6 +40,18 @@ export const handleUpdateTitleGroup = async ({ group_name, uuid, setGroups }: { 
     getGroups({ setGroups })
 }
 
+export const handleRemoveGroup = async ({ uuid, setGroups }: Pick<Group, "uuid"> & { setGroups: (groups: Group[]) => void }) => {
+
+    const { error } = await supabase
+        .from('Groups')
+        .update({ active: false })
+        .eq('uuid', uuid)
+
+    if (error) throw new Error("Error to remove group");
+
+    getGroups({ setGroups });
+}
+
 export const handleAddNoteSP = async ({ content, notes, setNotes }: { content: NoteContent, notes: Note[]; setNotes: (notes: Note[]) => void }): Promise<void> => {
     const { data, error } = await supabase
         .from("Notes")

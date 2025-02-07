@@ -16,6 +16,7 @@ interface Props {
     group_name,
     uuid,
   }: Pick<Group, "group_name" | "uuid">) => void;
+  removeGroup: ({ uuid }: Pick<Group, "uuid">) => void;
 }
 
 export const ActionBar: React.FC<Props> = ({
@@ -28,6 +29,7 @@ export const ActionBar: React.FC<Props> = ({
   onClearCompleted,
   handleFilterChange,
   updateTitleGroup,
+  removeGroup,
 }) => {
   const [titleGroup, setTitleGroup] = useState<string | undefined>(
     currentGroupName
@@ -42,6 +44,12 @@ export const ActionBar: React.FC<Props> = ({
 
     updateTitleGroup({ group_name: titleGroup, uuid: currentGroupUuid });
   };
+
+  const handleRemoveGroup = () => {
+    if(currentGroupUuid === undefined) return;
+
+    removeGroup({ uuid: currentGroupUuid });
+  }
 
   useEffect(() => {
     setTitleGroup(currentGroupName);
@@ -93,6 +101,7 @@ export const ActionBar: React.FC<Props> = ({
           <ActionsGroup
             groupSelected={currentGroupName}
             focusInputTitle={() => inputTitle.current?.focus()}
+            handleRemoveGroup={handleRemoveGroup}
           />
         )}
       </div>

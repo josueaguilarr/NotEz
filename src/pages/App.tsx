@@ -18,6 +18,7 @@ import {
   handleMoveNoteToGroup,
   handleAddGroupSP,
   handleUpdateTitleGroup,
+  handleRemoveGroup,
 } from "../utils/notesSupabase";
 import {
   getDataFromLocalStorage,
@@ -127,6 +128,11 @@ export const App = (): JSX.Element => {
     handleUpdateTitleGroup({ group_name, uuid, setGroups });
   };
 
+  const removeGroup = ({ uuid }: Pick<Group, "uuid">) => {
+    handleRemoveGroup({ uuid, setGroups });
+    getNotes({ setNotes });
+  };
+
   const filteredNotes = notes.filter((note) => {
     if (filterSelected === NOTE_FILTERS.ACTIVE) return !note.completed;
     if (filterSelected === NOTE_FILTERS.COMPLETED) return note.completed;
@@ -174,6 +180,7 @@ export const App = (): JSX.Element => {
           onClearCompleted={handleRemoveCompleted}
           handleFilterChange={handleFilterChange}
           updateTitleGroup={updateTitleGroup}
+          removeGroup={removeGroup}
         />
 
         <Notes
