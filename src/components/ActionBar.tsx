@@ -37,7 +37,7 @@ export const ActionBar: React.FC<Props> = ({
   const inputTitle = useRef<HTMLInputElement>(null);
 
   const singleActiveCount = activeCount === 1;
-  const activeTaskWord = singleActiveCount ? "tarea" : "tareas";
+  const activeTaskWord = singleActiveCount ? "nota" : "notas";
 
   const handleUpdateTitleGroup = () => {
     if (titleGroup === undefined || currentGroupUuid === undefined) return;
