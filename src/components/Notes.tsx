@@ -6,7 +6,6 @@ interface Props {
   notes: NoteType[];
   groups: Group[];
   isAuthenticated: boolean;
-  selectedGroupName: string | undefined;
   setCompleted: ({
     uuid,
     completed,
@@ -23,7 +22,6 @@ export const Notes: React.FC<Props> = ({
   notes,
   groups,
   isAuthenticated,
-  selectedGroupName,
   removeNote,
   setCompleted,
   setTitle,

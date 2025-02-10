@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { Notes } from "../components/Notes";
-import { FilterValue, NoteContentPick, Note, type NoteIdPick, type Group, GroupName } from "../types/types";
+import {
+  FilterValue,
+  NoteContentPick,
+  Note,
+  type NoteIdPick,
+  type Group,
+  GroupName,
+} from "../types/types";
 import { NOTE_FILTERS } from "../consts/consts";
 import { ActionBar } from "../components/ActionBar";
 import { Header } from "../components/Header";
@@ -56,7 +63,7 @@ export const App = (): JSX.Element => {
 
   const handleAddNote = async ({ content }: NoteContentPick): Promise<void> => {
     isAuthenticated
-      ? await handleAddNoteSP({ content, groupSelected , setGroups, setNotes })
+      ? await handleAddNoteSP({ content, groupSelected, setGroups, setNotes })
       : handleAddNoteLocalStorage({ content, setNotes });
   };
 
@@ -99,9 +106,7 @@ export const App = (): JSX.Element => {
       : handleRemoveNoteLocalStorage({ uuid, setNotes });
   };
 
-  const handleNotesForGroup = async ({
-    id_group,
-  }: Pick<Note, "id_group">) => {
+  const handleNotesForGroup = async ({ id_group }: Pick<Note, "id_group">) => {
     setGroupSelected(id_group);
     await getNotes({ setNotes, groupSelected: id_group });
   };
@@ -145,7 +150,7 @@ export const App = (): JSX.Element => {
   const completedCount = notes.length - activeCount;
   const { group_name: currentGroupName, uuid: currentGroupUuid } =
     groups.find((group) => group.id === groupSelected) || {};
-  
+
   useEffect(() => {
     isUserAuthenticated();
   }, []);
@@ -162,30 +167,30 @@ export const App = (): JSX.Element => {
         <CreateNote saveNote={handleAddNote} />
 
         {isAuthenticated && (
-          <Groups
-            groups={groups}
-            groupSelected={groupSelected}
-            setGroupSelected={handleNotesForGroup}
-            setAddGroup={handleAddGroup}
-          />
-        )}
+          <>
+            <Groups
+              groups={groups}
+              groupSelected={groupSelected}
+              setGroupSelected={handleNotesForGroup}
+              setAddGroup={handleAddGroup}
+            />
 
-        <ActionBar
-          activeCount={activeCount}
-          completedCount={completedCount}
-          filterSelected={filterSelected}
-          isAuthenticated={isAuthenticated}
-          currentGroupName={currentGroupName}
-          currentGroupUuid={currentGroupUuid}
-          onClearCompleted={handleRemoveCompleted}
-          handleFilterChange={handleFilterChange}
-          updateTitleGroup={updateTitleGroup}
-          removeGroup={removeGroup}
-        />
+            <ActionBar
+              activeCount={activeCount}
+              completedCount={completedCount}
+              filterSelected={filterSelected}
+              currentGroupName={currentGroupName}
+              currentGroupUuid={currentGroupUuid}
+              onClearCompleted={handleRemoveCompleted}
+              handleFilterChange={handleFilterChange}
+              updateTitleGroup={updateTitleGroup}
+              removeGroup={removeGroup}
+            />
+          </>
+        )}
 
         <Notes
           notes={filteredNotes}
-          selectedGroupName={currentGroupName}
           setCompleted={handleCompleted}
           setTitle={handleUpdateTitle}
           removeNote={handleRemoveNote}

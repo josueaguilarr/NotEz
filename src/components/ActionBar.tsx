@@ -7,7 +7,6 @@ interface Props {
   activeCount: number;
   completedCount: number;
   filterSelected: FilterValue;
-  isAuthenticated: boolean;
   currentGroupName: string | undefined;
   currentGroupUuid: string | undefined;
   onClearCompleted: () => void;
@@ -23,7 +22,6 @@ export const ActionBar: React.FC<Props> = ({
   activeCount = 0,
   completedCount = 0,
   filterSelected,
-  isAuthenticated,
   currentGroupName,
   currentGroupUuid,
   onClearCompleted,
@@ -56,23 +54,25 @@ export const ActionBar: React.FC<Props> = ({
   }, [currentGroupName]);
 
   return (
-    <footer className="flex justify-between gap-7 sm:flex-row flex-col mt-4 mb-6">
+    <footer className="flex justify-between gap-2 lg:flex-row md:flex-col flex-col mt-4 mb-6">
       <>
-        <span className="max-w-1/4 truncate flex items-center gap-[2px]">
+        <span className="lg:w-60 truncate flex items-center gap-[2px]">
           <span>
             <strong>{activeCount}</strong> {activeTaskWord} pendiente
             {!singleActiveCount && "s"}{" "}
             {currentGroupName !== undefined ? "en" : ""}
-            <input
-              ref={inputTitle}
-              type="text"
-              value={titleGroup || ""}
-              onChange={(e) => {
-                setTitleGroup(e.target.value);
-              }}
-              onBlur={handleUpdateTitleGroup}
-              className="ms-1 text-lg bg-transparent focus:outline-none font-bold gradientText"
-            />
+            {currentGroupName && (
+              <input
+                ref={inputTitle}
+                type="text"
+                value={titleGroup || ""}
+                onChange={(e) => {
+                  setTitleGroup(e.target.value);
+                }}
+                onBlur={handleUpdateTitleGroup}
+                className="ms-1 text-lg bg-transparent focus:outline-none font-bold gradientText"
+              />
+            )}
           </span>
         </span>
       </>
@@ -86,19 +86,11 @@ export const ActionBar: React.FC<Props> = ({
           />
         )}
 
-        {isAuthenticated && completedCount > 0 && (
-          <button
-            className="px-2 rounded-full text-sm font-medium bg-red-900 text-red-300"
-            onClick={onClearCompleted}
-          >
-            Borrar completados
-          </button>
-        )}
-
         <ActionsGroup
           groupSelected={currentGroupName}
           focusInputTitle={() => inputTitle.current?.focus()}
           handleRemoveGroup={handleRemoveGroup}
+          onClearCompleted={onClearCompleted}
         />
       </div>
     </footer>
