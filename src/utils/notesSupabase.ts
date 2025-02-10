@@ -8,14 +8,15 @@ import {
     NoteGroup,
     GroupName
 } from "../types/types";
+import { userSupabaseId } from "../pages/App";
 
 export const getDataFromDatabase = ({ setGroups, setNotes }: { setGroups: (groups: Group[]) => void; setNotes: (notes: Note[]) => void }) => {
     getGroups({ setGroups });
     getNotes({ setNotes });
 };
 
-export const getNotes = async ({ setNotes, groupSelected = null }: { setNotes: (notes: Note[]) => void; groupSelected?: number | null }) => {
-    const { data } = await supabase.from("Notes").select("*");
+export const getNotes = async ({ setNotes, groupSelected = null }: {setNotes: (notes: Note[]) => void; groupSelected?: number | null }) => {
+    const { data } = await supabase.from("Notes").select("*").eq("id_user", userSupabaseId);
     if (!data) return;
 
     let filter = groupSelected ? groupSelected : null;
@@ -24,7 +25,9 @@ export const getNotes = async ({ setNotes, groupSelected = null }: { setNotes: (
 };
 
 export const getGroups = async ({ setGroups }: { setGroups: (groups: Group[]) => void }) => {
-    const { data } = await supabase.rpc('get_groups_with_pending').order("created_at", { ascending: false });
+    const { data } = await supabase.rpc('get_groups_with_pending', {
+        user_id: userSupabaseId
+    }).order("created_at", { ascending: false });
 
     if (data) setGroups(data);
 };
@@ -55,7 +58,7 @@ export const handleRemoveGroup = async ({ uuid, setGroups }: Pick<Group, "uuid">
 export const handleAddNoteSP = async ({ content, groupSelected = null, setGroups, setNotes }: { content: NoteContent, groupSelected: number | null, setGroups: (groups: Group[]) => void; setNotes: (notes: Note[]) => void }): Promise<void> => {
     const { error } = await supabase
         .from("Notes")
-        .insert([{ content: content, id_group: groupSelected }])
+        .insert([{ content: content, id_group: groupSelected, id_user: userSupabaseId }])
         .select();
 
     if (error) return;
@@ -161,15 +164,14 @@ export const handleRemoveAllCompleted = async ({ notes, setNotes }: { notes: Not
     setNotes(newNotes);
 };
 
-export const handleAddGroupSP = async ({ group, setGroups }: { group: GroupName, groups: Group[], setGroups: (groups: Group[]) => void }) => {
-    const { data, error } = await supabase
+export const handleAddGroupSP = async ({ group, setGroups }: { group: GroupName, setGroups: (groups: Group[]) => void }) => {
+    const { error } = await supabase
         .from('Groups')
         .insert([
-            { group_name: group },
+            { group_name: group, id_user: userSupabaseId },
         ])
         .select()
 
-    console.log(data);
     if (error) return;
 
     getGroups({ setGroups })

@@ -40,6 +40,8 @@ export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_API_KEY
 );
 
+export let userSupabaseId = "";
+
 export const App = (): JSX.Element => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [filterSelected, setFilterSelected] = useState<FilterValue>(
@@ -51,10 +53,12 @@ export const App = (): JSX.Element => {
 
   const isUserAuthenticated = async () => {
     const { data } = await supabase.auth.getSession();
+    
     const isLoggedIn = data.session !== null;
     setIsAuthenticated(isLoggedIn);
 
     if (isLoggedIn) {
+      userSupabaseId = data.session?.user.id;
       getDataFromDatabase({ setGroups, setNotes });
     } else {
       getDataFromLocalStorage({ setNotes });
@@ -116,7 +120,7 @@ export const App = (): JSX.Element => {
   };
 
   const handleAddGroup = ({ group }: { group: GroupName }) => {
-    handleAddGroupSP({ group, groups, setGroups });
+    handleAddGroupSP({ group, setGroups });
   };
 
   const moveNoteToGroup = ({
