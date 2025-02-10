@@ -56,7 +56,7 @@ export const App = (): JSX.Element => {
 
   const handleAddNote = async ({ content }: NoteContentPick): Promise<void> => {
     isAuthenticated
-      ? await handleAddNoteSP({ content, notes, setNotes })
+      ? await handleAddNoteSP({ content, groupSelected , setGroups, setNotes })
       : handleAddNoteLocalStorage({ content, setNotes });
   };
 

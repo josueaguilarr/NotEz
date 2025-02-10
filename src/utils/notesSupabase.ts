@@ -19,24 +19,24 @@ export const getNotes = async ({ setNotes, groupSelected = null }: { setNotes: (
     if (!data) return;
 
     let filter = groupSelected ? groupSelected : null;
-    
+
     setNotes(data.filter((note) => note.id_group === filter));
 };
 
 export const getGroups = async ({ setGroups }: { setGroups: (groups: Group[]) => void }) => {
     const { data } = await supabase.rpc('get_groups_with_pending').order("created_at", { ascending: false });
-    
+
     if (data) setGroups(data);
 };
 
-export const handleUpdateTitleGroup = async ({ group_name, uuid, setGroups }: { group_name: GroupName, uuid: NoteUuid, setGroups: (groups: Group[]) => void }) => {    
+export const handleUpdateTitleGroup = async ({ group_name, uuid, setGroups }: { group_name: GroupName, uuid: NoteUuid, setGroups: (groups: Group[]) => void }) => {
     const { error } = await supabase
         .from('Groups')
         .update({ group_name: group_name })
         .eq('uuid', uuid)
 
     if (error) throw new Error("Error to update title of group")
-    
+
     getGroups({ setGroups })
 }
 
@@ -52,16 +52,16 @@ export const handleRemoveGroup = async ({ uuid, setGroups }: Pick<Group, "uuid">
     getGroups({ setGroups });
 }
 
-export const handleAddNoteSP = async ({ content, notes, setNotes }: { content: NoteContent, notes: Note[]; setNotes: (notes: Note[]) => void }): Promise<void> => {
-    const { data, error } = await supabase
+export const handleAddNoteSP = async ({ content, groupSelected = null, setGroups, setNotes }: { content: NoteContent, groupSelected: number | null, setGroups: (groups: Group[]) => void; setNotes: (notes: Note[]) => void }): Promise<void> => {
+    const { error } = await supabase
         .from("Notes")
-        .insert([{ content: content }])
+        .insert([{ content: content, id_group: groupSelected }])
         .select();
 
     if (error) return;
 
-    const newNotes = [...notes, data[0]];
-    setNotes(newNotes);
+    getGroups({ setGroups })
+    getNotes({ setNotes, groupSelected })
 };
 
 export const handleUpdateTitleSP = async ({
