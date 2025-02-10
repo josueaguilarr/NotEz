@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Group, NoteIdPick, Note as NoteType } from "../types/types";
-import { SuccessIcon } from "../icons/Icons";
+import { SixDotsIcon, SuccessIcon } from "../icons/Icons";
 import { ActionsNote } from "./ActionsNote";
 import { Modal } from "./Modal";
 
@@ -80,6 +80,8 @@ export const Note: React.FC<Props> = ({
         className="flex items-center justify-between py-3 px-4 gap-5
           animate-fadeIn"
       >
+        <SixDotsIcon className="size-7" />
+
         <div className="flex items-center gap-4">
           <label
             className="relative flex cursor-pointer items-center rounded-md"

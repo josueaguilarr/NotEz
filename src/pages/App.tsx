@@ -191,12 +191,13 @@ export const App = (): JSX.Element => {
 
         <Notes
           notes={filteredNotes}
+          groups={groups}
+          isAuthenticated={isAuthenticated}
           setCompleted={handleCompleted}
           setTitle={handleUpdateTitle}
           removeNote={handleRemoveNote}
           moveNoteToGroup={moveNoteToGroup}
-          groups={groups}
-          isAuthenticated={isAuthenticated}
+          updateNotes={setNotes}
         />
       </section>
     </main>
