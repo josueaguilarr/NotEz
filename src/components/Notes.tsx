@@ -1,3 +1,4 @@
+import { SearchIcon } from "../icons/Icons";
 import { Note as NoteType, type NoteIdPick, Group } from "../types/types";
 import { Note } from "./Note";
 
@@ -50,11 +51,9 @@ export const Notes: React.FC<Props> = ({
             </li>
           ))
         ) : (
-          <div className="sm:h-32 flex justify-center items-center text-3xl">
-            <p className="font-semibold">
-              No hay notas en el grupo
-              <strong className="gradientText ms-2">{selectedGroupName + "."}</strong>
-            </p>
+          <div className="w-100 h-56 flex flex-col items-center justify-center gap-3 opacity-30">
+            <SearchIcon className="size-20" />
+            <span className="font-medium ">No se encontraron notas.</span>
           </div>
         )}
       </ul>
