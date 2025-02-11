@@ -1,3 +1,12 @@
-<p style="text-align: center; font-size: 1.5rem; font-weight: bold;">React + TypeScript + Vite</p>
+## NotEz - Toma notas de manera simple y eficiente. 🚀
 
-![alt text](public/todo-ss.png)
+![alt text](public/notes-main.png)
+
+## 🛠 Tecnologías
+
+- React
+- TypeScript
+- TailwindCSS
+- Supabase
+- PNPM
+

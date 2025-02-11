@@ -85,7 +85,7 @@ export const ActionBar: React.FC<Props> = ({
             onFilterChange={handleFilterChange}
           />
         )}
-        {currentGroupName && (
+        {currentGroupName || completedCount > 0 ? (
           <ActionsGroup
             groupSelected={currentGroupName}
             focusInputTitle={() => inputTitle.current?.focus()}
@@ -93,7 +93,7 @@ export const ActionBar: React.FC<Props> = ({
             onClearCompleted={onClearCompleted}
             completedNotesCount={completedCount}
           />
-        )}
+        ) : null}
       </div>
     </footer>
   );
