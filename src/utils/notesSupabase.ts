@@ -15,7 +15,7 @@ export const getDataFromDatabase = ({ setGroups, setNotes }: { setGroups: (group
     getNotes({ setNotes });
 };
 
-export const getNotes = async ({ setNotes, groupSelected = null }: {setNotes: (notes: Note[]) => void; groupSelected?: number | null }) => {
+export const getNotes = async ({ setNotes, groupSelected = null }: { setNotes: (notes: Note[]) => void; groupSelected?: number | null }) => {
     const { data } = await supabase.from("Notes").select("*").eq("id_user", userSupabaseId);
     if (!data) return;
 
@@ -127,8 +127,9 @@ export const handleMoveNoteToGroup = async ({
     id_group,
     uuid,
     setNotes,
+    setGroups,
     groupSelected
-}: { id_group: NoteGroup; uuid: NoteUuid; setNotes: (notes: Note[]) => void; groupSelected: NoteGroup }) => {
+}: { id_group: NoteGroup; uuid: NoteUuid; setNotes: (notes: Note[]) => void; setGroups: (groups: Group[]) => void; groupSelected: NoteGroup }) => {
     const { error } = await supabase
         .from("Notes")
         .update({ id_group: id_group })
@@ -136,6 +137,7 @@ export const handleMoveNoteToGroup = async ({
 
     if (error) return;
 
+    await getGroups({ setGroups });
     await getNotes({ setNotes, groupSelected });
 };
 

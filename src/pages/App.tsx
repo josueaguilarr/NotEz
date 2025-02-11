@@ -127,7 +127,7 @@ export const App = (): JSX.Element => {
     id_group,
     uuid,
   }: Pick<Note, "id_group" | "uuid">) => {
-    handleMoveNoteToGroup({ id_group, uuid, setNotes, groupSelected });
+    handleMoveNoteToGroup({ id_group, uuid, setNotes, setGroups ,groupSelected });
   };
 
   const updateTitleGroup = ({
