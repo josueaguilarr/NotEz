@@ -54,9 +54,9 @@ export const ActionBar: React.FC<Props> = ({
   }, [currentGroupName]);
 
   return (
-    <footer className="flex justify-between gap-2 lg:flex-row md:flex-col flex-col mt-4 mb-6">
+    <footer className="flex justify-between gap-2 lg:flex-row flex-col mt-4 mb-6">
       <>
-        <span className="lg:w-60 truncate flex items-center gap-[2px]">
+        <span className="flex items-center gap-[2px]">
           <span>
             <strong>{activeCount}</strong> {activeTaskWord} pendiente
             {!singleActiveCount && "s"}{" "}
@@ -70,7 +70,7 @@ export const ActionBar: React.FC<Props> = ({
                   setTitleGroup(e.target.value);
                 }}
                 onBlur={handleUpdateTitleGroup}
-                className="ms-1 text-lg bg-transparent focus:outline-none font-bold gradientText"
+                className="ms-1 sm:w-[150px] w-28 text-lg bg-transparent focus:outline-none font-bold gradientText"
               />
             )}
           </span>
