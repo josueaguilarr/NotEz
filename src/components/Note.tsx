@@ -43,7 +43,16 @@ export const Note: React.FC<Props> = ({
 
     if (selectedGroup == id_group) return;
 
-    moveNoteToGroup({ id_group: selectedGroup, uuid });
+    setTimeout(() => {
+      const currentNote = document.getElementById(uuid);
+      currentNote?.classList.remove("animate-fadeIn");
+      currentNote?.classList.add("animate-fadeOut");
+
+      currentNote?.addEventListener("animationend", () => {
+        currentNote.remove();
+        moveNoteToGroup({ id_group: selectedGroup, uuid });
+      });
+    });
   };
 
   const handleCheckboxChange = (groupId: number) =>
