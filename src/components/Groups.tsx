@@ -36,7 +36,7 @@ export const Groups: React.FC<Props> = ({
           value={newGroup}
           type="text"
           placeholder="Nuevo grupo"
-          className="bg-transparent font-medium text-sm max-w-[100px] focus:outline-none"
+          className="bg-transparent font-medium text-sm max-w-[85px] focus:outline-none"
           onBlur={handleAddNewGroup}
           onChange={handleChangeNewGroup}
         />

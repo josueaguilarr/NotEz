@@ -79,20 +79,22 @@ export const ActionBar: React.FC<Props> = ({
 
       <div className="flex flex-wrap text-xs gap-1 sm:text-base">
         {activeCount > 0 && (
-          <Filters
-            filterSelected={filterSelected}
-            completedCount={completedCount}
-            onFilterChange={handleFilterChange}
-          />
-        )}
+          <>
+            <Filters
+              filterSelected={filterSelected}
+              completedCount={completedCount}
+              onFilterChange={handleFilterChange}
+            />
 
-        <ActionsGroup
-          groupSelected={currentGroupName}
-          focusInputTitle={() => inputTitle.current?.focus()}
-          handleRemoveGroup={handleRemoveGroup}
-          onClearCompleted={onClearCompleted}
-          completedNotesCount={completedCount}
-        />
+            <ActionsGroup
+              groupSelected={currentGroupName}
+              focusInputTitle={() => inputTitle.current?.focus()}
+              handleRemoveGroup={handleRemoveGroup}
+              onClearCompleted={onClearCompleted}
+              completedNotesCount={completedCount}
+            />
+          </>
+        )}
       </div>
     </footer>
   );
