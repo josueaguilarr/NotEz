@@ -77,7 +77,7 @@ export const Note: React.FC<Props> = ({
     <>
       <div
         id={uuid}
-        className="flex items-center justify-between py-3 px-4 gap-5
+        className="flex items-center justify-between py-3 gap-5
           animate-fadeIn"
       >
         <SixDotsIcon className="size-7" />

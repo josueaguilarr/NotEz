@@ -5,6 +5,7 @@ type Props = {
   focusInputTitle: () => void;
   handleRemoveGroup: () => void;
   onClearCompleted: () => void;
+  completedNotesCount: number;
 };
 
 export const ActionsGroup: React.FC<Props> = ({
@@ -12,6 +13,7 @@ export const ActionsGroup: React.FC<Props> = ({
   focusInputTitle,
   handleRemoveGroup,
   onClearCompleted,
+  completedNotesCount,
 }) => {
   return (
     <span className="group relative">
@@ -35,18 +37,20 @@ export const ActionsGroup: React.FC<Props> = ({
               </p>
             </>
           )}
-          <p
-            onClick={onClearCompleted}
-            className="flex gap-1 items-center text-[10px] hover:bg-neutral-800 p-1 rounded-md duration-200 cursor-pointer"
-          >
-            <TrashIcon className="size-4" />
-            Eliminar seleccionadas
-          </p>
+          {completedNotesCount > 0 && (
+            <p
+              onClick={onClearCompleted}
+              className="flex gap-1 items-center text-[10px] hover:bg-neutral-800 p-1 rounded-md duration-200 cursor-pointer"
+            >
+              <TrashIcon className="size-4" />
+              Eliminar completadas
+            </p>
+          )}
         </div>
       </div>
 
       <span>
-        <MoreIcon className="size-6" />
+        <MoreIcon className="size-6 rounded-full p-1 bg-neutral-800/40" />
       </span>
     </span>
   );

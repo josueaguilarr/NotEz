@@ -91,6 +91,7 @@ export const ActionBar: React.FC<Props> = ({
           focusInputTitle={() => inputTitle.current?.focus()}
           handleRemoveGroup={handleRemoveGroup}
           onClearCompleted={onClearCompleted}
+          completedNotesCount={completedCount}
         />
       </div>
     </footer>
